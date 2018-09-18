@@ -1,8 +1,0 @@
-C:\projects\homemade-orm\ORM\bin\Debug\netcoreapp2.1\ORM.deps.json
-C:\projects\homemade-orm\ORM\bin\Debug\netcoreapp2.1\ORM.dll
-C:\projects\homemade-orm\ORM\bin\Debug\netcoreapp2.1\ORM.pdb
-C:\projects\homemade-orm\ORM\obj\Debug\netcoreapp2.1\ORM.csproj.CoreCompileInputs.cache
-C:\projects\homemade-orm\ORM\obj\Debug\netcoreapp2.1\ORM.AssemblyInfoInputs.cache
-C:\projects\homemade-orm\ORM\obj\Debug\netcoreapp2.1\ORM.AssemblyInfo.cs
-C:\projects\homemade-orm\ORM\obj\Debug\netcoreapp2.1\ORM.dll
-C:\projects\homemade-orm\ORM\obj\Debug\netcoreapp2.1\ORM.pdb
