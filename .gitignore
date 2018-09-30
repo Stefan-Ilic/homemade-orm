@@ -1,0 +1,7 @@
+.vs/*
+ORM/bin/*
+ORM/obj/*
+RunnableProjectForTesting/bin/*
+RunnableProjectForTesting/obj/*
+UnitTests/bin/*
+UnitTests/obj/*
