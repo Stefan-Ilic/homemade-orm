@@ -6,3 +6,4 @@ C:\projects\homemade-orm\ORM\obj\Debug\netcoreapp2.1\ORM.AssemblyInfoInputs.cach
 C:\projects\homemade-orm\ORM\obj\Debug\netcoreapp2.1\ORM.AssemblyInfo.cs
 C:\projects\homemade-orm\ORM\obj\Debug\netcoreapp2.1\ORM.dll
 C:\projects\homemade-orm\ORM\obj\Debug\netcoreapp2.1\ORM.pdb
+C:\projects\homemade-orm\ORM\obj\Debug\netcoreapp2.1\ORM.csprojAssemblyReference.cache

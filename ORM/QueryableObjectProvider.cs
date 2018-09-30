@@ -36,14 +36,15 @@ namespace ORM
             var visitor = new SqlGeneratingExpressionTreeVisitor();
             visitor.Visit(expression);
 
-            return new Person[]
-                {
-                    new Person() { FirstName = "Peter", Age = 32 },
-                    new Person() { FirstName = "Marie", Age = 38 },
-                }
-                .OfType<T>()
-                .GetEnumerator();
+            //return new Person[]
+            //    {
+            //        new Person() { FirstName = "Peter", Age = 32 },
+            //        new Person() { FirstName = "Marie", Age = 38 },
+            //    }
+            //    .OfType<T>()
+            //    .GetEnumerator();
+
+            return new object[0].OfType<T>().GetEnumerator();
         }
     }
-}
 }

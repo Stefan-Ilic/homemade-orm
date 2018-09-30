@@ -7,7 +7,7 @@ using System.Text;
 
 namespace ORM
 {
-    internal class QueryableObject<T> : IQueryable<T>
+    public class QueryableObject<T> : IQueryable<T>
     {
 
             private Expression _expression = null;

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ORM
+namespace RunnableProjectForTesting
 {
     internal class Person
     {
