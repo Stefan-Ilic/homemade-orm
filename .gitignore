@@ -5,3 +5,5 @@ RunnableProjectForTesting/bin/*
 RunnableProjectForTesting/obj/*
 UnitTests/bin/*
 UnitTests/obj/*
+Interfaces/bin/*
+Interfaces/obj/*
