@@ -7,13 +7,16 @@ namespace ORM
 {
     internal class SqlGeneratingExpressionTreeVisitor : ExpressionTreeVisitor
     {
-        public StringBuilder SqlBuilder { get; } = new StringBuilder();
+        private SqlStatementBuilder _sqlStatementBuilder = new SqlStatementBuilder();
 
         public override Expression Visit(Expression e)
         {
             if (e != null)
             {
-                // Console.WriteLine(e.NodeType);
+                if (e.Type == typeof(QueryableObject<>))
+                {
+                    Console.WriteLine(e.Type);
+                }
             }
             return base.Visit(e);
         }
@@ -21,11 +24,13 @@ namespace ORM
         protected override Expression VisitConstant(ConstantExpression c)
         {
             // Console.WriteLine($"  Constant = {c.Value}");
+            // Console.WriteLine(c.Type);
             return base.VisitConstant(c);
         }
 
         protected override Expression VisitBinary(BinaryExpression b)
         {
+            // Console.WriteLine(b.Type);
             // Console.WriteLine($"  {Visit(b.Left)} {b.NodeType} {Visit(b.Right)}");
             return b;
             // return base.VisitBinary(b);
