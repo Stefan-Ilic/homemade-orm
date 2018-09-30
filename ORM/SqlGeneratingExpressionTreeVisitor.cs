@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 
@@ -7,16 +8,13 @@ namespace ORM
 {
     internal class SqlGeneratingExpressionTreeVisitor : ExpressionTreeVisitor
     {
-        private SqlStatementBuilder _sqlStatementBuilder = new SqlStatementBuilder();
+        public SqlStatementBuilder SqlStatementBuilder = new SqlStatementBuilder();
 
         public override Expression Visit(Expression e)
         {
-            if (e != null)
+            if (e?.Type.GetGenericArguments().Length == 2) //TODO magic number
             {
-                if (e.Type == typeof(QueryableObject<>))
-                {
-                    Console.WriteLine(e.Type);
-                }
+                SqlStatementBuilder.TableName = e.Type.GetGenericArguments()[0].ToString().Split('.').Last(); // TODO a little too hacky imo
             }
             return base.Visit(e);
         }
