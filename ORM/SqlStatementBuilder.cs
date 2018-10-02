@@ -43,6 +43,10 @@ namespace ORM
 
         public void StartCondition()
         {
+            if (_whereClauseBuilder.ToString().EndsWith(')'))
+            {
+                _whereClauseBuilder.Append(GetBinaryExpressionSymbol(ExpressionType.AndAlso));
+            }
             _whereClauseBuilder.Append("(");
             _hasWhereClause = true;
         }
