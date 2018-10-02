@@ -8,6 +8,7 @@ namespace RunnableProjectForTesting
     [Table("persons")]
     public class Person
     {
+        [Column("firstname")]
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public int Age { get; set; }

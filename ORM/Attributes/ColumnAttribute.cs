@@ -8,7 +8,9 @@ namespace ORM.Attributes
     {
         public ColumnAttribute(string name = "")
         {
-            
+            ColumnName = name;
         }
+
+        public string ColumnName { get; set; }
     }
 }

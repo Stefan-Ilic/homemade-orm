@@ -35,6 +35,7 @@ namespace ORM
             // Returns a enumeration (ToList, ToArray, foreach, ...)
             var visitor = new SqlGeneratingExpressionTreeVisitor();
             visitor.Visit(expression);
+            Console.WriteLine(visitor.SqlStatementBuilder.Statement);
 
             //return new Person[]
             //    {
