@@ -88,10 +88,17 @@ namespace ORM
                     return " = ";
                 case ExpressionType.GreaterThan:
                     return " > ";
+                case ExpressionType.GreaterThanOrEqual:
+                    return " >= ";
                 case ExpressionType.LessThan:
                     return " < ";
+                case ExpressionType.LessThanOrEqual:
+                    return " <= ";
                 case ExpressionType.OrElse:
                     return " OR ";
+                case ExpressionType.NotEqual:
+                    return " != ";
+                
                 default:
                     return "";
             }

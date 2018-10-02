@@ -12,7 +12,8 @@ namespace RunnableProjectForTesting
 
             var filtered = qry
                 .Where(i => i.Age > 18 || i.Age < 30)
-                .Where(i => i.FirstName == "Peter");
+                .Where(i => i.FirstName == "Peter")
+                .Where(i => i.FirstName != "Otto" && i.Age <= 100);
 
             var lst = filtered.ToList();
 
