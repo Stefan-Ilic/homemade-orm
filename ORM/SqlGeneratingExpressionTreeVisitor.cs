@@ -21,8 +21,9 @@ namespace ORM
 
         protected override Expression VisitMemberAccess(MemberExpression m)
         {
-            // TODO prefer Column Atribute, if not set, use prop name
-            SqlStatementBuilder.AddColumnToCondition(m.Member.Name);
+            var columnAttribute = m.Member.GetCustomAttribute<ColumnAttribute>();
+            SqlStatementBuilder.AddColumnToCondition(columnAttribute != null
+                ? columnAttribute.ColumnName : m.Member.Name);
             return base.VisitMemberAccess(m);
         }
 
@@ -43,15 +44,17 @@ namespace ORM
 
                 SqlStatementBuilder.TableName = tableAttributeName != "" ? tableAttributeName : className;
 
+                //fetch properties for column names
                 var properties = typeOfObjectInTable?.GetProperties();
 
-                //fetch properties for column names
-                //TODO check for ColumnAttribute, take prop name if none assigned
                 if (properties != null)
                 {
                     foreach (var property in properties)
                     {
-                        SqlStatementBuilder.ColumnNames.Add(property.Name);
+                        var columnAttribute = property.GetCustomAttribute<ColumnAttribute>();
+                        SqlStatementBuilder.ColumnNames
+                            .Add(columnAttribute != null ?
+                                columnAttribute.ColumnName : property.Name);
                     }
                 }
             }
