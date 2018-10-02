@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using ORM.Attributes;
 
 namespace RunnableProjectForTesting
 {
-    internal class Person
+    [Table("persons")]
+    public class Person
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
