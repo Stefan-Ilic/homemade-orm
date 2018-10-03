@@ -7,3 +7,4 @@ UnitTests/bin/*
 UnitTests/obj/*
 Interfaces/bin/*
 Interfaces/obj/*
+.vscode/
