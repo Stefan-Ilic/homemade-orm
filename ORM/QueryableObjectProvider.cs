@@ -8,6 +8,12 @@ namespace ORM
 {
     internal class QueryableObjectProvider : IQueryProvider
     {
+        private readonly MyOrm _myOrm;
+
+        public QueryableObjectProvider(MyOrm myOrm)
+        {
+            _myOrm = myOrm;
+        }
         public IQueryable CreateQuery(Expression expression)
         {
             throw new NotImplementedException();
@@ -35,15 +41,9 @@ namespace ORM
             // Returns a enumeration (ToList, ToArray, foreach, ...)
             var visitor = new SqlGeneratingExpressionTreeVisitor();
             visitor.Visit(expression);
-            Console.WriteLine(visitor.SqlStatementBuilder.Statement);
 
-            //return new Person[]
-            //    {
-            //        new Person() { FirstName = "Peter", Age = 32 },
-            //        new Person() { FirstName = "Marie", Age = 38 },
-            //    }
-            //    .OfType<T>()
-            //    .GetEnumerator();
+            // DO THINGS WITH THE ORM
+            //_myOrm.RunStatementOnDb(visitor.SqlStatementBuilder.Statement);
 
             return new object[0].OfType<T>().GetEnumerator();
         }

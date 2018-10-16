@@ -7,15 +7,15 @@ using System.Text;
 
 namespace ORM
 {
-    public class QueryableObject<T> : IQueryable<T>
+    public class QueryableObject<T> : IOrderedQueryable<T>
     {
 
             private Expression _expression = null;
             private QueryableObjectProvider _provider = null;
-            public QueryableObject()
+            public QueryableObject(MyOrm myOrm)
             {
                 _expression = Expression.Constant(this);
-                _provider = new QueryableObjectProvider();
+                _provider = new QueryableObjectProvider(myOrm);
             }
 
             internal QueryableObject(QueryableObjectProvider provider, Expression expression)

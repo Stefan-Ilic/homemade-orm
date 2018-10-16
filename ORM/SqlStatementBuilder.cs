@@ -27,7 +27,7 @@ namespace ORM
                         }
 
                         return selectbuilder.ToString();
-                    default: throw new Exception();
+                    default: throw new NotSupportedException();
                 }
             }
         }

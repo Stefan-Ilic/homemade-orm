@@ -10,7 +10,9 @@ namespace RunnableProjectForTesting
     {
         [Column("firstname")]
         public string FirstName { get; set; }
+
         public string LastName { get; set; }
+
         [Column("4g3")]
         public int Age { get; set; }
 
