@@ -12,10 +12,10 @@ namespace ORM
         {
             get
             {
+                var selectbuilder = new StringBuilder();
                 switch (StatementType)
                 {
                     case SqlStatementType.Select:
-                        var selectbuilder = new StringBuilder();
                         selectbuilder.Append("SELECT ");
                         selectbuilder.Append(string.Join(",", ColumnNames));
                         selectbuilder.Append(" FROM ");
@@ -25,10 +25,28 @@ namespace ORM
                             selectbuilder.Append(" WHERE ");
                             selectbuilder.Append(_whereClauseBuilder.ToString());
                         }
-
-                        return selectbuilder.ToString();
+                        break;
+                    case SqlStatementType.Create:
+                        selectbuilder.Append("CREATE ");
+                        break;
+                    case SqlStatementType.Alter:
+                        selectbuilder.Append("ALTER ");
+                        break;
+                    case SqlStatementType.Drop:
+                        selectbuilder.Append("DROP ");
+                        break;
+                    case SqlStatementType.Delete:
+                        selectbuilder.Append("DELETE ");
+                        break;
+                    case SqlStatementType.Insert:
+                        selectbuilder.Append("INSERT ");
+                        break;
+                    case SqlStatementType.Update:
+                        selectbuilder.Append("UPDATE ");
+                        break;
                     default: throw new NotSupportedException();
                 }
+                return selectbuilder.ToString();
             }
         }
 
@@ -82,7 +100,7 @@ namespace ORM
         public string TableName { get; set; }
         public IList<string> ColumnNames { get; set; } = new List<string>();
 
-        public string GetBinaryExpressionSymbol(ExpressionType expressionType)
+        private string GetBinaryExpressionSymbol(ExpressionType expressionType)
         {
             switch (expressionType)
             {
