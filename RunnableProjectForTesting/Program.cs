@@ -8,7 +8,7 @@ namespace RunnableProjectForTesting
     {
         private static void Main(string[] args)
         {
-            var orm = new MyOrm();
+            var orm = new MyOrm("");
             var qry = orm.GetQuery<Person>();
 
             var filtered = qry

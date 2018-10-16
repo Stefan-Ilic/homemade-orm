@@ -12,7 +12,6 @@ namespace ORM
     internal class SqlGeneratingExpressionTreeVisitor : ExpressionTreeVisitor
     {
         public SqlStatementBuilder SqlStatementBuilder = new SqlStatementBuilder(SqlStatementType.Select);
-        public StringBuilder StringBuilder = new StringBuilder();
 
         public override Expression Visit(Expression e)
         {
