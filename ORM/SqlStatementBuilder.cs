@@ -27,7 +27,8 @@ namespace ORM
                         }
                         break;
                     case SqlStatementType.Create:
-                        selectbuilder.Append("CREATE ");
+                        selectbuilder.Append("CREATE TABLE");
+                        selectbuilder.Append(TableName);
                         break;
                     case SqlStatementType.Alter:
                         selectbuilder.Append("ALTER ");

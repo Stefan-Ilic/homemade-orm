@@ -5,7 +5,6 @@ using ORM.Attributes;
 
 namespace RunnableProjectForTesting
 {
-    [Table("persons")]
     public class Person
     {
         [Column("firstname")]
