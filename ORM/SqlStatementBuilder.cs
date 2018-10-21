@@ -31,6 +31,20 @@ namespace ORM
                         builder.Append("CREATE TABLE ");
                         builder.Append(TableName);
                         builder.Append(" (");
+                        foreach (var pair in Columns)
+                        {
+                            builder.Append(pair.Key);
+                            builder.Append(" ");
+                            builder.Append(GetSimpleDataType(pair.Value));
+                            if (pair.Key.ToLower() == "id")
+                            {
+                                builder.Append(" PRIMARY KEY");
+                            }
+                            builder.Append(",");
+                        }
+                        builder.Length--;
+
+                        builder.Append(")");
                         break;
                     case SqlStatementType.Alter:
                         builder.Append("ALTER ");
@@ -58,7 +72,6 @@ namespace ORM
             }
         }
 
-        private string _primaryKey => Columns.Keys.FirstOrDefault(x => x.ToLower() == "id");
 
         public SqlStatementBuilder(SqlStatementType statementType)
         {

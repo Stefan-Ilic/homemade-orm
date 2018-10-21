@@ -12,6 +12,8 @@ namespace ORM
 {
     public class MyOrm
     {
+        private MySqlConnection _connection;
+
         public MyOrm(string connectionString)
         {
             ConnectionString = connectionString;
@@ -29,29 +31,38 @@ namespace ORM
         //TODO depends on dbm
         private void Connect()
         {
-            var connection = new MySqlConnection(ConnectionString);
-            connection.Open();
+            _connection = new MySqlConnection(ConnectionString);
+            _connection.Open();
         }
 
         public void Insert(object objectToInsert)
         {
-            var tableName = OrmUtilities.GetTableName(objectToInsert);
+            var tableName = OrmUtilities.GetTableName(objectToInsert.GetType());
 
             if (!TableExists(tableName))
             {
                 CreateTable(objectToInsert);
             }
 
-            var builder = new SqlStatementBuilder(SqlStatementType.Create)
+            var builder = new SqlStatementBuilder(SqlStatementType.Insert)
             {
                 TableName = tableName,
-                Columns = OrmUtilities.GetColumns(objectToInsert)
+                Columns = OrmUtilities.GetColumns(objectToInsert.GetType())
             };
+
+            // RunStatement(builder.Statement);
         }
 
         private void CreateTable(object objectToInsert)
         {
-            throw new NotImplementedException();
+            //TODO multiple OrmUtilities calls, save values somewhere
+            var builder =
+                new SqlStatementBuilder(SqlStatementType.Create)
+                {
+                    TableName = OrmUtilities.GetTableName(objectToInsert.GetType()),
+                    Columns = OrmUtilities.GetColumns(objectToInsert.GetType())
+                };
+            RunStatement(builder.Statement);
         }
 
         private bool TableExists(string tableName)
@@ -67,10 +78,14 @@ namespace ORM
         //TODO depends on dbm
         private int RunStatement(string statement)
         {
-            Connect();
-            var sql = new MySqlCommand(statement);
+            if (_connection == null)
+            {
+                Connect();
+            }
+            var sql = new MySqlCommand(statement, _connection);
             var result = sql.ExecuteScalar();
-            return (int)result;
+
+            return result == null ? 0 : 1;
         }
     }
 }
