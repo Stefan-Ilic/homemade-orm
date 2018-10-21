@@ -26,7 +26,7 @@ namespace UnitTests
         }
         
         [Fact]
-        public void Create_CorrectInput_CorrectStatement()
+        public void CreateTable_CorrectInput_CorrectStatement()
         {
             var builder = new SqlStatementBuilder(SqlStatementType.Create)
             {
@@ -35,8 +35,8 @@ namespace UnitTests
                 {
                     {"id", typeof(int)},
                     {"firstname", typeof(string)},
-                    {"LastName", typeof(string)},
-                    {"lastname", typeof(int)}
+                    {"lastName", typeof(string)},
+                    {"age", typeof(int)}
                 }
             };
 
