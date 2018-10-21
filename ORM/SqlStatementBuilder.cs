@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using Interfaces;
@@ -12,44 +13,52 @@ namespace ORM
         {
             get
             {
-                var selectbuilder = new StringBuilder();
+                var builder = new StringBuilder();
                 switch (StatementType)
                 {
                     case SqlStatementType.Select:
-                        selectbuilder.Append("SELECT ");
-                        selectbuilder.Append(string.Join(",", ColumnNames));
-                        selectbuilder.Append(" FROM ");
-                        selectbuilder.Append(TableName);
+                        builder.Append("SELECT ");
+                        builder.Append(string.Join(",", Columns.Keys));
+                        builder.Append(" FROM ");
+                        builder.Append(TableName);
                         if (_hasWhereClause)
                         {
-                            selectbuilder.Append(" WHERE ");
-                            selectbuilder.Append(_whereClauseBuilder.ToString());
+                            builder.Append(" WHERE ");
+                            builder.Append(_whereClauseBuilder.ToString());
                         }
                         break;
                     case SqlStatementType.Create:
-                        selectbuilder.Append("CREATE TABLE");
-                        selectbuilder.Append(TableName);
+                        builder.Append("CREATE TABLE ");
+                        builder.Append(TableName);
+                        builder.Append(" (");
                         break;
                     case SqlStatementType.Alter:
-                        selectbuilder.Append("ALTER ");
+                        builder.Append("ALTER ");
                         break;
                     case SqlStatementType.Drop:
-                        selectbuilder.Append("DROP ");
+                        builder.Append("DROP ");
                         break;
                     case SqlStatementType.Delete:
-                        selectbuilder.Append("DELETE ");
+                        builder.Append("DELETE ");
                         break;
                     case SqlStatementType.Insert:
-                        selectbuilder.Append("INSERT ");
+                        builder.Append("INSERT ");
                         break;
                     case SqlStatementType.Update:
-                        selectbuilder.Append("UPDATE ");
+                        builder.Append("UPDATE ");
+                        break;
+                    case SqlStatementType.TableExists:
+                        builder.Append("SHOW TABLES LIKE '");
+                        builder.Append(TableName);
+                        builder.Append("';");
                         break;
                     default: throw new NotSupportedException();
                 }
-                return selectbuilder.ToString();
+                return builder.ToString();
             }
         }
+
+        private string _primaryKey => Columns.Keys.FirstOrDefault(x => x.ToLower() == "id");
 
         public SqlStatementBuilder(SqlStatementType statementType)
         {
@@ -99,7 +108,7 @@ namespace ORM
 
         public SqlStatementType StatementType { get; set; }
         public string TableName { get; set; }
-        public IList<string> ColumnNames { get; set; } = new List<string>();
+        public IDictionary<string, Type> Columns { get; set; } = new Dictionary<string, Type>();
 
         private string GetBinaryExpressionSymbol(ExpressionType expressionType)
         {
@@ -125,6 +134,21 @@ namespace ORM
                 default:
                     return "";
             }
+        }
+
+        private string GetSimpleDataType(Type type)
+        {
+            if (type == typeof(string))
+            {
+                return "TEXT";
+            }
+
+            if (type == typeof(int))
+            {
+                return "INT";
+            }
+
+            return "";
         }
     }
 }

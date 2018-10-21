@@ -41,6 +41,7 @@ namespace ORM
             // Returns a enumeration (ToList, ToArray, foreach, ...)
             var visitor = new SqlGeneratingExpressionTreeVisitor();
             visitor.Visit(expression);
+            Console.WriteLine(visitor.SqlStatementBuilder.Statement);
 
             // DO THINGS WITH THE ORM
             //_myOrm.RunStatementOnDb(visitor.SqlStatementBuilder.Statement);

@@ -9,7 +9,7 @@ namespace Interfaces
         string Statement { get; }
         SqlStatementType StatementType { get; set; }
         string TableName { get; set; }
-        IList<string> ColumnNames { get; set; }
+        IDictionary<string, Type> Columns { get; set; }
     }
 
     public enum SqlStatementType
@@ -20,6 +20,7 @@ namespace Interfaces
         Delete,
         Insert,
         Select,
-        Update
+        Update,
+        TableExists
     }
 }

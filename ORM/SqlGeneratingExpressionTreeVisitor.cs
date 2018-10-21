@@ -35,32 +35,10 @@ namespace ORM
         {
             if (!c.Value.GetType().IsPrimitive && !(c.Value is string)) //TODO decimal etc aint primitive either
             {
-                var className = c.Value.GetType().GetGenericArguments().First().Name;
+                var tableType = c.Value.GetType().GetGenericArguments().FirstOrDefault();
 
-                var typeOfObjectInTable = c.Value.GetType().GetGenericArguments().FirstOrDefault();
-
-                var tableAttributeName = "";
-                var tableAttribute = typeOfObjectInTable.GetCustomAttribute<TableAttribute>();
-                if (tableAttribute != null)
-                {
-                    tableAttributeName = tableAttribute.TableName;
-                }
-
-                SqlStatementBuilder.TableName = tableAttributeName != "" ? tableAttributeName : className;
-
-                //fetch properties for column names
-                var properties = typeOfObjectInTable?.GetProperties();
-
-                if (properties != null)
-                {
-                    foreach (var property in properties)
-                    {
-                        var columnAttribute = property.GetCustomAttribute<ColumnAttribute>();
-                        SqlStatementBuilder.ColumnNames
-                            .Add(columnAttribute != null ?
-                                columnAttribute.ColumnName : property.Name);
-                    }
-                }
+                SqlStatementBuilder.TableName = OrmUtilities.GetTableName(tableType);
+                SqlStatementBuilder.Columns = OrmUtilities.GetColumns(tableType);
             }
             else
             {

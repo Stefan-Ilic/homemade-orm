@@ -26,12 +26,8 @@ namespace ORM
 
         public string Statement { get; set; }
 
-        public void RunStatementOnDb(string statement)
-        {
-
-        }
-
-        public void Connect()
+        //TODO depends on dbm
+        private void Connect()
         {
             var connection = new MySqlConnection(ConnectionString);
             connection.Open();
@@ -39,26 +35,42 @@ namespace ORM
 
         public void Insert(object objectToInsert)
         {
-            var className = objectToInsert.GetType().Name;
-            var tableAttributeName = objectToInsert.GetType().GetCustomAttribute<TableAttribute>()?.TableName;
-            var tablename = tableAttributeName ?? className;
+            var tableName = OrmUtilities.GetTableName(objectToInsert);
+
+            if (!TableExists(tableName))
+            {
+                CreateTable(objectToInsert);
+            }
 
             var builder = new SqlStatementBuilder(SqlStatementType.Create)
             {
-                ColumnNames = GetColumnNames(objectToInsert)
+                TableName = tableName,
+                Columns = OrmUtilities.GetColumns(objectToInsert)
             };
         }
 
-        private static List<string> GetColumnNames(object tableObject)
+        private void CreateTable(object objectToInsert)
         {
-            var list = new List<string>();
-            var properties = tableObject.GetType()?.GetProperties();
+            throw new NotImplementedException();
+        }
 
-            if (properties != null)
+        private bool TableExists(string tableName)
+        {
+            var builder = new SqlStatementBuilder(SqlStatementType.TableExists)
             {
-                list.AddRange(from property in properties let columnAttribute = property.GetCustomAttribute<ColumnAttribute>() select columnAttribute != null ? columnAttribute.ColumnName : property.Name);
-            }
-            return list;
+                TableName = tableName
+            };
+
+            return RunStatement(builder.Statement) != 0;
+        }
+
+        //TODO depends on dbm
+        private int RunStatement(string statement)
+        {
+            Connect();
+            var sql = new MySqlCommand(statement);
+            var result = sql.ExecuteScalar();
+            return (int)result;
         }
     }
 }
