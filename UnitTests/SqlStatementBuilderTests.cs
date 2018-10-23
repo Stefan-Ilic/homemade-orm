@@ -31,7 +31,7 @@ namespace UnitTests
             var builder = new SqlStatementBuilder(SqlStatementType.Create)
             {
                 TableName = "people",
-                Columns = new Dictionary<string, Type>
+                ColumnNamesAndTypes = new Dictionary<string, Type>
                 {
                     {"id", typeof(int)},
                     {"firstname", typeof(string)},
@@ -42,6 +42,32 @@ namespace UnitTests
 
             const string expected = @"CREATE TABLE people (id INT PRIMARY KEY,firstname TEXT,lastname TEXT,age INT)";
             builder.Statement.ToLower().ShouldBe(expected.ToLower());
+        }
+
+        [Fact]
+        public void Insert_CorrectInput_CorrectStatement()
+        {
+            var person = new Person
+            {
+                Id = 1,
+                FirstName = "Mike",
+                LastName = "Rosoft",
+                Age = 1337
+            };
+            var builder = new SqlStatementBuilder(SqlStatementType.Insert)
+            {
+                TableName = "people",
+                ColumnNamesAndValues = new Dictionary<string, object>
+                {
+                    {"Id", 1},
+                    {"FirstName", "Mike"},
+                    {"LastName", "Rosoft"},
+                    {"Age", 1337}
+                }
+            };
+            const string expected = "INSERT INTO people (Id,FirstName,LastName,Age) VALUES (1,'Mike','Rosoft',1337)";
+            builder.Statement.ShouldBe(expected);
+
         }
     }
 }

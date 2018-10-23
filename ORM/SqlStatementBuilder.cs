@@ -13,12 +13,12 @@ namespace ORM
         {
             get
             {
-                var builder = new StringBuilder();
+                var builder = new StringBuilder(); //TODO all this crap in own method
                 switch (StatementType)
                 {
                     case SqlStatementType.Select:
                         builder.Append("SELECT ");
-                        builder.Append(string.Join(",", Columns.Keys));
+                        builder.Append(string.Join(",", ColumnNamesAndTypes.Keys));
                         builder.Append(" FROM ");
                         builder.Append(TableName);
                         if (_hasWhereClause)
@@ -31,12 +31,12 @@ namespace ORM
                         builder.Append("CREATE TABLE ");
                         builder.Append(TableName);
                         builder.Append(" (");
-                        foreach (var pair in Columns)
+                        foreach (var pair in ColumnNamesAndTypes)
                         {
                             builder.Append(pair.Key);
                             builder.Append(" ");
                             builder.Append(GetSimpleDataType(pair.Value));
-                            if (pair.Key.ToLower() == "id")
+                            if (pair.Key.ToLower() == "id") //TODO hacky shit
                             {
                                 builder.Append(" PRIMARY KEY");
                             }
@@ -56,10 +56,16 @@ namespace ORM
                         builder.Append("DELETE ");
                         break;
                     case SqlStatementType.Insert:
-                        builder.Append("INSERT ");
+                        builder.Append("INSERT INTO ");
+                        builder.Append(TableName);
+                        builder.Append(" (");
+                        builder.Append(string.Join(",", ColumnNamesAndValues.Keys));
+                        builder.Append(") VALUES (");
+                        builder.Append(string.Join(",", ColumnNamesAndValues.Values.Select(TransformValueForDb))); //TODO only works for primitives
+                        builder.Append(")");
                         break;
                     case SqlStatementType.Update:
-                        builder.Append("UPDATE ");
+                        builder.Append("UPDATE");
                         break;
                     case SqlStatementType.TableExists:
                         builder.Append("SHOW TABLES LIKE '");
@@ -109,6 +115,20 @@ namespace ORM
             _whereClauseBuilder.Append("'");
         }
 
+        private object TransformValueForDb(object initialValue)
+        {
+            switch (initialValue)
+            {
+                case int i:
+                    return i;
+                case string s:
+                    return $"'{s}'";
+                default:
+                    throw new NotSupportedException();
+            }
+
+        }
+
         public void AddIntToCondition(int intToBeAdded)
         {
             _whereClauseBuilder.Append(intToBeAdded);
@@ -121,7 +141,8 @@ namespace ORM
 
         public SqlStatementType StatementType { get; set; }
         public string TableName { get; set; }
-        public IDictionary<string, Type> Columns { get; set; } = new Dictionary<string, Type>();
+        public IDictionary<string, Type> ColumnNamesAndTypes { get; set; } = new Dictionary<string, Type>();
+        public IDictionary<string, object> ColumnNamesAndValues { get; set; } = new Dictionary<string, object>();
 
         private string GetBinaryExpressionSymbol(ExpressionType expressionType)
         {

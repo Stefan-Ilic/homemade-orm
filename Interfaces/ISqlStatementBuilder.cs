@@ -9,7 +9,7 @@ namespace Interfaces
         string Statement { get; }
         SqlStatementType StatementType { get; set; }
         string TableName { get; set; }
-        IDictionary<string, Type> Columns { get; set; }
+        IDictionary<string, Type> ColumnNamesAndTypes { get; set; }
     }
 
     public enum SqlStatementType

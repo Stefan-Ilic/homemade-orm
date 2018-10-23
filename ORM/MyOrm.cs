@@ -47,10 +47,12 @@ namespace ORM
             var builder = new SqlStatementBuilder(SqlStatementType.Insert)
             {
                 TableName = tableName,
-                Columns = OrmUtilities.GetColumns(objectToInsert.GetType())
+                ColumnNamesAndValues = OrmUtilities.GetColumnNamesAndValues(objectToInsert)
             };
 
-            // RunStatement(builder.Statement);
+            var s = builder.Statement;
+
+            RunStatement(builder.Statement);
         }
 
         private void CreateTable(object objectToInsert)
@@ -60,7 +62,7 @@ namespace ORM
                 new SqlStatementBuilder(SqlStatementType.Create)
                 {
                     TableName = OrmUtilities.GetTableName(objectToInsert.GetType()),
-                    Columns = OrmUtilities.GetColumns(objectToInsert.GetType())
+                    ColumnNamesAndTypes = OrmUtilities.GetColumnNamesAndTypes(objectToInsert.GetType())
                 };
             RunStatement(builder.Statement);
         }
