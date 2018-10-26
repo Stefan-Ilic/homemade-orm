@@ -184,5 +184,7 @@ namespace ORM
 
             return "";
         }
+
+        public Type TableObjectType { get; set; }
     }
 }

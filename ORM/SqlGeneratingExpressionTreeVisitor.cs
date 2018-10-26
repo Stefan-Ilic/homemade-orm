@@ -37,6 +37,7 @@ namespace ORM
             {
                 var tableType = c.Value.GetType().GetGenericArguments().FirstOrDefault();
 
+                SqlStatementBuilder.TableObjectType = c.Value.GetType();
                 SqlStatementBuilder.TableName = OrmUtilities.GetTableName(tableType);
                 SqlStatementBuilder.ColumnNamesAndTypes = OrmUtilities.GetColumnNamesAndTypes(tableType);
             }

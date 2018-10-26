@@ -44,9 +44,10 @@ namespace ORM
             Console.WriteLine(visitor.SqlStatementBuilder.Statement);
 
             // DO THINGS WITH THE ORM
-            //_myOrm.RunStatementOnDb(visitor.SqlStatementBuilder.Statement);
 
-            return new object[0].OfType<T>().GetEnumerator();
+
+            var list = _myOrm.Select(visitor.SqlStatementBuilder);
+            return list.OfType<T>().GetEnumerator();
         }
     }
 }
