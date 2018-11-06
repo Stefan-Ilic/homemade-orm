@@ -52,6 +52,12 @@ namespace ORM
             };
 
             var s = builder.Statement;
+            var changetrackerEntry = new ChangeTrackerEntry
+            {
+                State = ChangeTrackerEntry.States.Inserted,
+                Item = objectToInsert
+            };
+
 
             RunStatement(builder.Statement);
         }
@@ -92,9 +98,9 @@ namespace ORM
         }
 
         //TODO does actual db stuff, is runstatement really necessary?
-        public List<object> Select(SqlStatementBuilder builder)
+        public List<T> Select<T>(SqlStatementBuilder builder)
         {
-            var objects = new List<object>();
+            var objects = new List<T>();
 
             if (_connection == null)
             {
@@ -109,30 +115,34 @@ namespace ORM
             {
                 while (reader.Read())
                 {
-                    var myType = builder.TableObjectType;
-                    var object = Activator.CreateInstance<typeof(myType) >();
+                    var myObject = Activator.CreateInstance<T>();
 
-                    foreach (var pair in builder.ColumnNamesAndTypes)
+                    var properties = typeof(T).GetProperties();
+                    var changetrackerEntry = new ChangeTrackerEntry
                     {
-                        AddProperty(newTableObject, pair.Key, reader[pair.Key]);
+                        State =  ChangeTrackerEntry.States.Unmodified,
+                        Item = myObject,
+                        Originals = new List<(object, PropertyInfo)>()
+                    };
+
+                    foreach (var property in properties)
+                    {
+                        var value = reader[property.Name];
+                        property.SetValue(myObject, value);
+                        changetrackerEntry.Originals.Add((value, property));
+                        objects.Add(myObject);
                     }
-
-                    objects.Add(newTableObject);
-
                 }
             }
 
             return objects;
         }
 
-        private static void AddProperty(ExpandoObject expando, string propertyName, object propertyValue)
+        public void SubmitChanges()
         {
-            // ExpandoObject supports IDictionary so we can extend it like this
-            var expandoDict = expando as IDictionary<string, object>;
-            if (expandoDict.ContainsKey(propertyName))
-                expandoDict[propertyName] = propertyValue;
-            else
-                expandoDict.Add(propertyName, propertyValue);
+
         }
+
+        public ChangeTracker ChangeTracker { get; } = new ChangeTracker();
     }
 }

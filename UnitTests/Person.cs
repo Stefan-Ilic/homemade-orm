@@ -10,12 +10,12 @@ namespace UnitTests
     {
         public int Id { get; set; }
 
-        [Column("firstname")]
+        [Column("FirstName")]
         public string FirstName { get; set; }
 
         public string LastName { get; set; }
 
-        [Column("4g3")]
+        [Column("Age")]
         public int Age { get; set; }
     }
 }

@@ -20,6 +20,15 @@ namespace RunnableProjectForTesting
 
             var lst = filtered.ToList();
 
+            foreach (var person1 in lst)
+            {
+                person1.Age++;
+            }
+
+            orm.SubmitChanges();
+            
+      
+
             var person = new Person
             {
                 Age = 18,
