@@ -3,85 +3,84 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
-using Interfaces;
+using SqlStatementBuilder.Interfaces;
 
 namespace ORM
 {
-    public class SqlStatementBuilder : ISqlStatementBuilder
+    public class SqlStatementBuilder
     {
-        public string Statement
+        //public string Statement
+        //{
+        //    get
+        //    {
+        //        var builder = new StringBuilder(); //TODO all this crap in own method
+        //        switch (StatementType)
+        //        {
+        //            case SqlStatementType.Select:
+        //                builder.Append("SELECT ");
+        //                builder.Append(string.Join(",", ColumnNamesAndTypes.Keys));
+        //                builder.Append(" FROM ");
+        //                builder.Append(TableName);
+        //                if (_hasWhereClause)
+        //                {
+        //                    builder.Append(" WHERE ");
+        //                    builder.Append(_whereClauseBuilder.ToString());
+        //                }
+        //                break;
+        //            case SqlStatementType.Create:
+        //                builder.Append("CREATE TABLE ");
+        //                builder.Append(TableName);
+        //                builder.Append(" (");
+        //                foreach (var pair in ColumnNamesAndTypes)
+        //                {
+        //                    builder.Append(pair.Key);
+        //                    builder.Append(" ");
+        //                    builder.Append(GetSimpleDataType(pair.Value));
+        //                    if (pair.Key.ToLower() == "id") //TODO hacky shit
+        //                    {
+        //                        builder.Append(" PRIMARY KEY");
+        //                    }
+        //                    builder.Append(",");
+        //                }
+        //                builder.Length--;
+
+        //                builder.Append(")");
+        //                break;
+        //            case SqlStatementType.Alter:
+        //                builder.Append("ALTER ");
+        //                break;
+        //            case SqlStatementType.Drop:
+        //                builder.Append("DROP ");
+        //                break;
+        //            case SqlStatementType.Delete:
+        //                builder.Append("DELETE ");
+        //                break;
+        //            case SqlStatementType.Insert:
+        //                builder.Append("INSERT INTO ");
+        //                builder.Append(TableName);
+        //                builder.Append(" (");
+        //                builder.Append(string.Join(",", ColumnNamesAndValues.Keys));
+        //                builder.Append(") VALUES (");
+        //                builder.Append(string.Join(",", ColumnNamesAndValues.Values.Select(TransformValueForDb))); //TODO only works for primitives
+        //                builder.Append(")");
+        //                break;
+        //            case SqlStatementType.Update:
+        //                builder.Append("UPDATE");
+        //                break;
+        //            case SqlStatementType.TableExists:
+        //                builder.Append("SHOW TABLES LIKE '");
+        //                builder.Append(TableName);
+        //                builder.Append("';");
+        //                break;
+        //            default: throw new NotSupportedException();
+        //        }
+        //        return builder.ToString();
+        //    }
+        //}
+
+
+        public SqlStatementBuilder()
         {
-            get
-            {
-                var builder = new StringBuilder(); //TODO all this crap in own method
-                switch (StatementType)
-                {
-                    case SqlStatementType.Select:
-                        builder.Append("SELECT ");
-                        builder.Append(string.Join(",", ColumnNamesAndTypes.Keys));
-                        builder.Append(" FROM ");
-                        builder.Append(TableName);
-                        if (_hasWhereClause)
-                        {
-                            builder.Append(" WHERE ");
-                            builder.Append(_whereClauseBuilder.ToString());
-                        }
-                        break;
-                    case SqlStatementType.Create:
-                        builder.Append("CREATE TABLE ");
-                        builder.Append(TableName);
-                        builder.Append(" (");
-                        foreach (var pair in ColumnNamesAndTypes)
-                        {
-                            builder.Append(pair.Key);
-                            builder.Append(" ");
-                            builder.Append(GetSimpleDataType(pair.Value));
-                            if (pair.Key.ToLower() == "id") //TODO hacky shit
-                            {
-                                builder.Append(" PRIMARY KEY");
-                            }
-                            builder.Append(",");
-                        }
-                        builder.Length--;
-
-                        builder.Append(")");
-                        break;
-                    case SqlStatementType.Alter:
-                        builder.Append("ALTER ");
-                        break;
-                    case SqlStatementType.Drop:
-                        builder.Append("DROP ");
-                        break;
-                    case SqlStatementType.Delete:
-                        builder.Append("DELETE ");
-                        break;
-                    case SqlStatementType.Insert:
-                        builder.Append("INSERT INTO ");
-                        builder.Append(TableName);
-                        builder.Append(" (");
-                        builder.Append(string.Join(",", ColumnNamesAndValues.Keys));
-                        builder.Append(") VALUES (");
-                        builder.Append(string.Join(",", ColumnNamesAndValues.Values.Select(TransformValueForDb))); //TODO only works for primitives
-                        builder.Append(")");
-                        break;
-                    case SqlStatementType.Update:
-                        builder.Append("UPDATE");
-                        break;
-                    case SqlStatementType.TableExists:
-                        builder.Append("SHOW TABLES LIKE '");
-                        builder.Append(TableName);
-                        builder.Append("';");
-                        break;
-                    default: throw new NotSupportedException();
-                }
-                return builder.ToString();
-            }
-        }
-
-
-        public SqlStatementBuilder(SqlStatementType statementType)
-        {
-            StatementType = statementType;
         }
 
         private bool _hasWhereClause;
@@ -139,7 +138,6 @@ namespace ORM
             _whereClauseBuilder.Append(columnToBeAdded);
         }
 
-        public SqlStatementType StatementType { get; set; }
         public string TableName { get; set; }
         public IDictionary<string, Type> ColumnNamesAndTypes { get; set; } = new Dictionary<string, Type>();
         public IDictionary<string, object> ColumnNamesAndValues { get; set; } = new Dictionary<string, object>();

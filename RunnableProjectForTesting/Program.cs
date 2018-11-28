@@ -20,21 +20,21 @@ namespace RunnableProjectForTesting
 
             var lst = filtered.ToList();
 
-            foreach (var person1 in lst)
-            {
-                person1.Age++;
-            }
+            //foreach (var person1 in lst)
+            //{
+            //    person1.Age++;
+            //}
 
-            orm.SubmitChanges();
+            //orm.SubmitChanges();
             
       
 
-            var person = new Person
-            {
-                Age = 18,
-                FirstName = "Manfred",
-                LastName = "Fredmann"
-            };
+            //var person = new Person
+            //{
+            //    Age = 18,
+            //    FirstName = "Manfred",
+            //    LastName = "Fredmann"
+            //};
 
             // orm.Insert(person);
 

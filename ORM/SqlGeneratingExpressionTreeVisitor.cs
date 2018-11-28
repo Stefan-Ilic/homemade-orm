@@ -4,14 +4,15 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Text;
-using Interfaces;
 using ORM.Attributes;
+using SqlStatementBuilder;
+using SqlStatementBuilder.Interfaces;
 
 namespace ORM
 {
     internal class SqlGeneratingExpressionTreeVisitor : ExpressionTreeVisitor
     {
-        public SqlStatementBuilder SqlStatementBuilder = new SqlStatementBuilder(SqlStatementType.Select);
+        public ISqlStatementBuilder SqlStatementBuilder = new MySqlStatementBuilder();
 
         public override Expression Visit(Expression e)
         {
@@ -21,8 +22,10 @@ namespace ORM
         protected override Expression VisitMemberAccess(MemberExpression m)
         {
             var columnAttribute = m.Member.GetCustomAttribute<ColumnAttribute>();
+
             SqlStatementBuilder.AddColumnToCondition(columnAttribute != null
                 ? columnAttribute.ColumnName : m.Member.Name);
+
             return base.VisitMemberAccess(m);
         }
 
@@ -37,9 +40,9 @@ namespace ORM
             {
                 var tableType = c.Value.GetType().GetGenericArguments().FirstOrDefault();
 
-                SqlStatementBuilder.TableObjectType = c.Value.GetType();
+                SqlStatementBuilder.TableType = c.Value.GetType();
                 SqlStatementBuilder.TableName = OrmUtilities.GetTableName(tableType);
-                SqlStatementBuilder.ColumnNamesAndTypes = OrmUtilities.GetColumnNamesAndTypes(tableType);
+                SqlStatementBuilder.Columns = OrmUtilities.GetColumns(tableType);
             }
             else
             {
@@ -67,7 +70,5 @@ namespace ORM
             SqlStatementBuilder.EndCondition();
             return b;
         }
-
-
     }
 }
