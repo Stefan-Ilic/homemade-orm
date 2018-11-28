@@ -60,6 +60,7 @@ namespace ORM
             {
                 State = ChangeTrackerEntry.States.Inserted,
                 Item = objectToInsert,
+                Originals = new Dictionary<PropertyInfo, object>()
             };
 
             var properties = objectToInsert.GetType().GetProperties();
@@ -78,10 +79,10 @@ namespace ORM
 
         private void ApplyInsertedEntries()
         {
-            var unmodifiedChanges =
+            var insertedChanges =
                 ChangeTracker.Entries.Where(x => x.Value.State == ChangeTrackerEntry.States.Inserted);
 
-            foreach (var objectToInsert in unmodifiedChanges.Select(x => x.Key))
+            foreach (var objectToInsert in insertedChanges.Select(x => x.Key))
             {
                 var builder = new MySqlStatementBuilder
                 {
@@ -195,12 +196,12 @@ namespace ORM
         private void UpdateUnmodifiedChangeTrackerEntries()
         {
             var unmodifiedChanges =
-                ChangeTracker.Entries.Where(x => x.Value.State == ChangeTrackerEntry.States.Unmodified);
+                ChangeTracker.Entries.Values.Where(x => x.State == ChangeTrackerEntry.States.Unmodified);
 
-            foreach (var pair in unmodifiedChanges)
+            foreach (var entry in unmodifiedChanges)
             {
-                var possiblyModifiedObject = pair.Key;
-                var originalProperties = pair.Value.Originals;
+                var possiblyModifiedObject = entry.Item;
+                var originalProperties = entry.Originals;
 
                 foreach (var originalPropertyKeyValuePair in originalProperties)
                 {
@@ -210,7 +211,7 @@ namespace ORM
 
                     if (valueHasChanged)
                     {
-                        pair.Value.State = ChangeTrackerEntry.States.Modified;
+                        entry.State = ChangeTrackerEntry.States.Modified;
                     }
                 }
             }

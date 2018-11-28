@@ -90,6 +90,7 @@ namespace IntegrationTests
             person3.Id.ShouldBe(person2.Id + 1);
 
             context.Persons.Count().ShouldBe(3);
+            orm.ChangeTracker.Entries.ShouldAllBe(x => x.Value.State == ChangeTrackerEntry.States.Unmodified);
 
             //Update
             var rand = new Random();
@@ -98,9 +99,10 @@ namespace IntegrationTests
 
             context.Persons.Single(x => x.Id == person1.Id).Age.ShouldBe(1337);
             orm.SubmitChanges();
-            context.Persons.Single(x => x.Id == person1.Id).Age.ShouldBe(newAge);
+            orm.ChangeTracker.Entries.Count(x => x.Value.State == ChangeTrackerEntry.States.Modified).ShouldBe(1);
+            //context.Persons.Single(x => x.Id == person1.Id).Age.ShouldBe(newAge);
             context.Persons.Count().ShouldBe(3);
-
+            //TODO update originals when submitting changes
         }
 
 
