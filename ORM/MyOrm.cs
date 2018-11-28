@@ -9,6 +9,7 @@ using System.Reflection;
 using System.Text;
 using MySql.Data.MySqlClient;
 using ORM.Attributes;
+using SqlStatementBuilder;
 using SqlStatementBuilder.Interfaces;
 
 namespace ORM
@@ -40,58 +41,80 @@ namespace ORM
 
         public void Insert(object objectToInsert)
         {
-            //var tableName = OrmUtilities.GetTableName(objectToInsert.GetType());
+            var tableName = OrmUtilities.GetTableName(objectToInsert.GetType());
 
-            //if (!TableExists(tableName))
-            //{
-            //    CreateTable(objectToInsert.GetType());
-            //}
+            if (!TableExists(tableName))
+            {
+                CreateTable(objectToInsert.GetType());
+            }
 
-            //var builder = new SqlStatementBuilder(SqlStatementType.Insert)
-            //{
-            //    TableName = tableName,
-            //    ColumnNamesAndValues = OrmUtilities.GetColumnNamesAndValues(objectToInsert)
-            //};
+
 
 
             ////TODO own method
-            //_insertionId--;
-            //var idProperty = objectToInsert.GetType().GetProperties().Single(x => x.Name.ToLower() == "id");
-            //idProperty.SetValue(objectToInsert, _insertionId);
+            _insertionId--;
+            var idProperty = objectToInsert.GetType().GetProperties().Single(x => x.Name.ToLower() == "id"); //TODO this cant stay like this
+            idProperty.SetValue(objectToInsert, _insertionId);
 
-            //var changeTrackerEntry = new ChangeTrackerEntry
-            //{
-            //    State = ChangeTrackerEntry.States.Inserted,
-            //    Item = objectToInsert,
-            //};
+            var changeTrackerEntry = new ChangeTrackerEntry
+            {
+                State = ChangeTrackerEntry.States.Inserted,
+                Item = objectToInsert,
+            };
 
-            //ChangeTracker.Entries.Add(objectToInsert, changeTrackerEntry);
-            //ChangeTracker.EntriesWithId.Add((_insertionId, objectToInsert.GetType()), changeTrackerEntry);
+            var properties = objectToInsert.GetType().GetProperties();
+
+            foreach (var property in properties)
+            {
+                changeTrackerEntry.Originals.Add(property, property.GetValue(objectToInsert));
+            }
+
+            ChangeTracker.Entries.Add(objectToInsert, changeTrackerEntry);
+            ChangeTracker.EntriesWithId.Add((_insertionId, objectToInsert.GetType()), changeTrackerEntry);
 
 
-            //RunStatement(builder.Statement);
+            // RunStatement(builder.InsertStatement);
+        }
+
+        private void ApplyInsertedEntries()
+        {
+            var unmodifiedChanges =
+                ChangeTracker.Entries.Where(x => x.Value.State == ChangeTrackerEntry.States.Inserted);
+
+            foreach (var objectToInsert in unmodifiedChanges.Select(x => x.Key))
+            {
+                var builder = new MySqlStatementBuilder
+                {
+                    TableName = OrmUtilities.GetTableName(objectToInsert.GetType()),
+                    Columns = OrmUtilities.GetColumns(objectToInsert)
+                };
+                
+                var newId = RunInsertStatement(builder.InsertStatement);
+                var idProperty = objectToInsert.GetType().GetProperties().Single(x => x.Name.ToLower() == "id"); //TODO this cant stay like this
+                idProperty.SetValue(objectToInsert, newId);
+                ChangeTracker.Entries[objectToInsert].State = ChangeTrackerEntry.States.Unmodified;
+            }
         }
 
         private void CreateTable(Type typeOfTableObject)
         {
-            //var builder =
-            //    new SqlStatementBuilder(SqlStatementType.Create)
-            //    {
-            //        TableName = OrmUtilities.GetTableName(typeOfTableObject),
-            //        ColumnNamesAndTypes = OrmUtilities.GetColumnNamesAndTypes(typeOfTableObject)
-            //    };
-            //RunStatement(builder.Statement);
+            var builder =
+                new MySqlStatementBuilder
+                {
+                    TableName = OrmUtilities.GetTableName(typeOfTableObject),
+                    Columns = OrmUtilities.GetColumns(typeOfTableObject)
+                };
+            RunStatement(builder.CreateTableStatement);
         }
 
         private bool TableExists(string tableName)
         {
-            return false;
-            //var builder = new SqlStatementBuilder(SqlStatementType.TableExists)
-            //{
-            //    TableName = tableName
-            //};
+            var builder = new MySqlStatementBuilder()
+            {
+                TableName = tableName
+            };
 
-            //return RunStatement(builder.Statement) != 0;
+            return RunStatement(builder.TableExistsStatement) != 0;
         }
 
         //TODO depends on dbm
@@ -104,7 +127,21 @@ namespace ORM
             var sql = new MySqlCommand(statement, _connection);
             var result = sql.ExecuteScalar();
 
-            return result == null ? 0 : 1;
+
+            return result == null ?  0 : 1;
+        }
+
+        private int RunInsertStatement(string statement)
+        {
+            if (_connection == null)
+            {
+                Connect();
+            }
+            var sql = new MySqlCommand(statement, _connection);
+            var result = sql.ExecuteScalar();
+
+
+            return (int) sql.LastInsertedId;
         }
 
         //TODO does actual db stuff, is RunStatement really necessary?
@@ -152,6 +189,7 @@ namespace ORM
         public void SubmitChanges()
         {
             UpdateUnmodifiedChangeTrackerEntries();
+            ApplyInsertedEntries();
         }
 
         private void UpdateUnmodifiedChangeTrackerEntries()
@@ -179,5 +217,7 @@ namespace ORM
         }
 
         public ChangeTracker ChangeTracker { get; } = new ChangeTracker();
+
+
     }
 }

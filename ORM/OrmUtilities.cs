@@ -42,6 +42,22 @@ namespace ORM
             return dictionary;
         }
 
+        public static Dictionary<string, (Type, object)> GetColumns(object objectToInsert)
+        {
+            var dictionary = new Dictionary<string, (Type type, object value)>();
+
+            var properties = objectToInsert.GetType().GetProperties();
+            if (properties == null) return dictionary;
+
+            foreach (var property in properties)
+            {
+                var columnAttribute = property.GetCustomAttribute<ColumnAttribute>();
+                dictionary.Add(columnAttribute != null ? columnAttribute.ColumnName : property.Name,
+                    (property.PropertyType, property.GetValue(objectToInsert)));
+            }
+            return dictionary;
+        }
+
         //TODO  duplicated code, put in own method
         public static Dictionary<string, object> GetColumnNamesAndValues(object objectToInsert)
         {

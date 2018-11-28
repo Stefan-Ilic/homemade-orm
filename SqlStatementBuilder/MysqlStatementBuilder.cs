@@ -35,19 +35,58 @@ namespace SqlStatementBuilder
         {
             get
             {
+                var columnsWithoutId = new Dictionary<string, (Type, object)>(Columns); //TODO hacky shit
+                columnsWithoutId.Remove("Id");
                 var builder = new StringBuilder();
                 builder.Append("INSERT INTO ");
                 builder.Append(TableName);
                 builder.Append(" (");
-                builder.Append(string.Join(",", Columns.Keys));
+                builder.Append(string.Join(",", columnsWithoutId.Keys));
                 builder.Append(") VALUES (");
-                builder.Append(string.Join(",", Columns.Values.Select(x => x.Item2))); 
+                builder.Append(string.Join(",", columnsWithoutId.Values.Select(x => TransformValueForDb(x.Item2))));
                 builder.Append(")");
                 return builder.ToString();
             }
         }
 
-        public string CreateTableStatement { get; }
+        public string CreateTableStatement
+        {
+            get
+            {
+                var builder = new StringBuilder();
+                builder.Append("CREATE TABLE ");
+                builder.Append(TableName);
+                builder.Append(" (");
+                foreach (var pair in Columns)
+                {
+                    builder.Append(pair.Key);
+                    builder.Append(" ");
+                    builder.Append(TransformDataTypeForDb(pair.Value.Item1));
+                    if (pair.Key.ToLower() == "id") //TODO hacky shit
+                    {
+                        builder.Append(" PRIMARY KEY AUTO_INCREMENT");
+                    }
+                    builder.Append(",");
+                }
+                builder.Length--;
+
+                builder.Append(")");
+                return builder.ToString();
+            }
+        }
+
+        public string TableExistsStatement
+        {
+            get
+            {
+                var builder = new StringBuilder();
+                builder.Append("SHOW TABLES LIKE '");
+                builder.Append(TableName);
+                builder.Append("';");
+                return builder.ToString();
+            }
+        }
+
         public string TableName { get; set; }
         public Type TableType { get; set; }
         public IDictionary<string, (Type, object)> Columns { get; set; } = new Dictionary<string, (Type type, object value)>();
@@ -113,6 +152,35 @@ namespace SqlStatementBuilder
         public void AddColumnToCondition(string columnToBeAdded)
         {
             _whereClauseBuilder.Append(columnToBeAdded);
+        }
+
+        private object TransformValueForDb(object initialValue)
+        {
+            switch (initialValue)
+            {
+                case int i:
+                    return i;
+                case string s:
+                    return $"'{s}'";
+                default:
+                    throw new NotSupportedException();
+            }
+
+        }
+
+        private string TransformDataTypeForDb(Type type)
+        {
+            if (type == typeof(string))
+            {
+                return "TEXT";
+            }
+
+            if (type == typeof(int))
+            {
+                return "INT";
+            }
+
+            return "";
         }
     }
 }
