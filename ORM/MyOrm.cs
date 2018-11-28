@@ -29,6 +29,8 @@ namespace ORM
             return new QueryableObject<T>(this);
         }
 
+        private int _insertionId;
+
         //TODO depends on dbm
         private void Connect()
         {
@@ -51,15 +53,23 @@ namespace ORM
                 ColumnNamesAndValues = OrmUtilities.GetColumnNamesAndValues(objectToInsert)
             };
 
-            var s = builder.Statement;
-            var changetrackerEntry = new ChangeTrackerEntry
+
+            //TODO own method
+            _insertionId--;
+            var idProperty = objectToInsert.GetType().GetProperties().Single(x => x.Name.ToLower() == "id");
+            idProperty.SetValue(objectToInsert, _insertionId);
+
+            var changeTrackerEntry = new ChangeTrackerEntry
             {
                 State = ChangeTrackerEntry.States.Inserted,
-                Item = objectToInsert
+                Item = objectToInsert,
             };
 
+            ChangeTracker.Entries.Add(objectToInsert, changeTrackerEntry);
+            ChangeTracker.EntriesWithId.Add((_insertionId, objectToInsert.GetType()), changeTrackerEntry);
 
-            RunStatement(builder.Statement);
+
+            //RunStatement(builder.Statement);
         }
 
         private void CreateTable(object objectToInsert)
@@ -97,7 +107,7 @@ namespace ORM
             return result == null ? 0 : 1;
         }
 
-        //TODO does actual db stuff, is runstatement really necessary?
+        //TODO does actual db stuff, is RunStatement really necessary?
         public List<T> Select<T>(SqlStatementBuilder builder)
         {
             var objects = new List<T>();
@@ -118,18 +128,18 @@ namespace ORM
                     var myObject = Activator.CreateInstance<T>();
 
                     var properties = typeof(T).GetProperties();
-                    var changetrackerEntry = new ChangeTrackerEntry
+                    var changeTrackerEntry = new ChangeTrackerEntry
                     {
                         State =  ChangeTrackerEntry.States.Unmodified,
                         Item = myObject,
-                        Originals = new List<(object, PropertyInfo)>()
+                        Originals = new Dictionary<PropertyInfo, object>()
                     };
 
                     foreach (var property in properties)
                     {
                         var value = reader[property.Name];
                         property.SetValue(myObject, value);
-                        changetrackerEntry.Originals.Add((value, property));
+                        changeTrackerEntry.Originals.Add(property, property.GetValue(myObject));
                         objects.Add(myObject);
                     }
                 }
@@ -140,7 +150,31 @@ namespace ORM
 
         public void SubmitChanges()
         {
+            UpdateUnmodifiedChangeTrackerEntriesIfTheyChanged();
+        }
 
+        private void UpdateUnmodifiedChangeTrackerEntriesIfTheyChanged()
+        {
+            var unmodifiedChanges =
+                ChangeTracker.Entries.Where(x => x.Value.State == ChangeTrackerEntry.States.Unmodified);
+
+            foreach (var pair in unmodifiedChanges)
+            {
+                var possiblyModifiedObject = pair.Key;
+                var originalProperties = pair.Value.Originals;
+
+                foreach (var originalPropertyKeyValuePair in originalProperties)
+                {
+                    var valueThatMightHaveChanged = originalPropertyKeyValuePair.Value;
+                    var currentValueOfObject = originalPropertyKeyValuePair.Key.GetValue(possiblyModifiedObject);
+                    var valueHasChanged = valueThatMightHaveChanged != currentValueOfObject;
+
+                    if (valueHasChanged)
+                    {
+                        pair.Value.State = ChangeTrackerEntry.States.Modified;
+                    }
+                }
+            }
         }
 
         public ChangeTracker ChangeTracker { get; } = new ChangeTracker();

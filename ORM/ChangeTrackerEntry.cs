@@ -8,7 +8,7 @@ namespace ORM
     {
         public object Item { get; set; }
 
-        public List<(object, PropertyInfo)> Originals { get; set; }
+        public Dictionary<PropertyInfo, object> Originals { get; set; }
 
         public States State { get; set; }
 
