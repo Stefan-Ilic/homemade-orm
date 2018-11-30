@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Text;
 using ORM.Attributes;
 using SqlStatementBuilder;
@@ -21,6 +22,16 @@ namespace ORM
 
         protected override Expression VisitMemberAccess(MemberExpression m)
         {
+            //its a variable
+            if (m.Expression is ConstantExpression expression &&
+                m.Member is FieldInfo info)
+            {
+                var container = expression.Value;
+                var value = info.GetValue(container);
+                SqlStatementBuilder.AddIntToCondition((int)value);
+                return base.VisitMemberAccess(m);
+            }
+
             var columnAttribute = m.Member.GetCustomAttribute<ColumnAttribute>();
 
             SqlStatementBuilder.AddColumnToCondition(columnAttribute != null
@@ -40,9 +51,17 @@ namespace ORM
             {
                 var tableType = c.Value.GetType().GetGenericArguments().FirstOrDefault();
 
+                var isVariable = c.Type.GetCustomAttribute<CompilerGeneratedAttribute>() != null;
+                if (isVariable)
+                {
+                    return base.VisitConstant(c);
+                }
+
                 SqlStatementBuilder.TableType = c.Value.GetType();
                 SqlStatementBuilder.TableName = OrmUtilities.GetTableName(tableType);
                 SqlStatementBuilder.Columns = OrmUtilities.GetColumns(tableType);
+
+
             }
             else
             {
