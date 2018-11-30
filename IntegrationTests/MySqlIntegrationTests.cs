@@ -99,10 +99,13 @@ namespace IntegrationTests
 
             context.Persons.Single(x => x.Id == person1.Id).Age.ShouldBe(1337);
             orm.SubmitChanges();
-            orm.ChangeTracker.Entries.Count(x => x.Value.State == ChangeTrackerEntry.States.Modified).ShouldBe(1);
-            //context.Persons.Single(x => x.Id == person1.Id).Age.ShouldBe(newAge);
+            orm.ChangeTracker.Entries.Count(x => x.Value.State == ChangeTrackerEntry.States.Unmodified).ShouldBe(3);
+            context = new MysqlContext(options);
+            context.Persons.Single(x => x.Id == person1.Id).Age.ShouldBe(newAge);
             context.Persons.Count().ShouldBe(3);
-            //TODO update originals when submitting changes
+
+            //Delete
+
         }
 
 

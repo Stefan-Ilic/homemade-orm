@@ -92,17 +92,17 @@ namespace SqlStatementBuilder
             get
             {
                 var columnsWithoutId = new Dictionary<string, (Type, object)>(Columns); //TODO hacky shit
-                var id = columnsWithoutId["Id"];
+                var id = columnsWithoutId["Id"].Item2;
                 columnsWithoutId.Remove("Id");
                 var builder = new StringBuilder();
                 builder.Append("UPDATE ");
                 builder.Append(TableName);
-                builder.Append(" SET" );
+                builder.Append(" SET " );
                 foreach (var column in columnsWithoutId)
                 {
                     builder.Append(column.Key);
                     builder.Append("=");
-                    builder.Append(column.Value.Item2);
+                    builder.Append(TransformValueForDb(column.Value.Item2));
                     builder.Append(",");
                 }
                 builder.Length--;

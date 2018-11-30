@@ -94,6 +94,12 @@ namespace ORM
                 var idProperty = objectToInsert.GetType().GetProperties().Single(x => x.Name.ToLower() == "id"); //TODO this cant stay like this
                 idProperty.SetValue(objectToInsert, newId);
                 ChangeTracker.Entries[objectToInsert].State = ChangeTrackerEntry.States.Unmodified;
+                var properties = objectToInsert.GetType().GetProperties();
+                ChangeTracker.Entries[objectToInsert].Originals = new Dictionary<PropertyInfo, object>();
+                foreach (var property in properties)
+                {
+                    ChangeTracker.Entries[objectToInsert].Originals.Add(property, property.GetValue(objectToInsert));
+                }
             }
         }
 
@@ -191,6 +197,31 @@ namespace ORM
         {
             UpdateUnmodifiedChangeTrackerEntries();
             ApplyInsertedEntries();
+            ApplyModifiedEntries();
+        }
+
+        private void ApplyModifiedEntries()
+        {
+            var modifiedEntries =
+                ChangeTracker.Entries.Where(x => x.Value.State == ChangeTrackerEntry.States.Modified);
+
+            foreach (var modifiedObject in modifiedEntries.Select(x => x.Key))
+            {
+                var builder = new MySqlStatementBuilder
+                {
+                    TableName = OrmUtilities.GetTableName(modifiedObject.GetType()),
+                    Columns = OrmUtilities.GetColumns(modifiedObject)
+                };
+
+                RunStatement(builder.UpdateStatement);
+                ChangeTracker.Entries[modifiedObject].State = ChangeTrackerEntry.States.Unmodified;
+                var properties = modifiedObject.GetType().GetProperties();
+                ChangeTracker.Entries[modifiedObject].Originals = new Dictionary<PropertyInfo, object>();
+                foreach (var property in properties)
+                {
+                    ChangeTracker.Entries[modifiedObject].Originals.Add(property, property.GetValue(modifiedObject));
+                }
+            }
         }
 
         private void UpdateUnmodifiedChangeTrackerEntries()
@@ -207,11 +238,12 @@ namespace ORM
                 {
                     var valueThatMightHaveChanged = originalPropertyKeyValuePair.Value;
                     var currentValueOfObject = originalPropertyKeyValuePair.Key.GetValue(possiblyModifiedObject);
-                    var valueHasChanged = valueThatMightHaveChanged != currentValueOfObject;
+                    var valueHasChanged = !Equals(valueThatMightHaveChanged, currentValueOfObject);
 
                     if (valueHasChanged)
                     {
                         entry.State = ChangeTrackerEntry.States.Modified;
+                        break;
                     }
                 }
             }
