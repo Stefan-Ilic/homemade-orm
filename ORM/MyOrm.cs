@@ -154,43 +154,69 @@ namespace ORM
         //TODO does actual db stuff, is RunStatement really necessary?
         public List<T> Select<T>(ISqlStatementBuilder builder)
         {
-            return null;
-            //var objects = new List<T>();
+            var objects = new List<T>();
 
-            //if (_connection == null)
-            //{
-            //    Connect();
-            //}
+            if (_connection == null)
+            {
+                Connect();
+            }
 
-            //var sql = new MySqlCommand(builder.Statement, _connection);
+            var sql = new MySqlCommand(builder.SelectStatement, _connection);
 
-            //var reader = sql.ExecuteReader();
+            var reader = sql.ExecuteReader();
 
-            //if (reader.HasRows)
-            //{
-            //    while (reader.Read())
-            //    {
-            //        var myObject = Activator.CreateInstance<T>();
+            if (reader.HasRows)
+            {
+                while (reader.Read())
+                {
+                    var myObject = Activator.CreateInstance<T>();
 
-            //        var properties = typeof(T).GetProperties();
-            //        var changeTrackerEntry = new ChangeTrackerEntry
-            //        {
-            //            State =  ChangeTrackerEntry.States.Unmodified,
-            //            Item = myObject,
-            //            Originals = new Dictionary<PropertyInfo, object>()
-            //        };
+                    var properties = typeof(T).GetProperties();
 
-            //        foreach (var property in properties)
-            //        {
-            //            var value = reader[property.Name];
-            //            property.SetValue(myObject, value);
-            //            changeTrackerEntry.Originals.Add(property, property.GetValue(myObject));
-            //            objects.Add(myObject);
-            //        }
-            //    }
-            //}
+                    foreach (var property in properties)
+                    {
+                        var value = reader[property.Name];
+                        property.SetValue(myObject, value);
+                    }
 
-            //return objects;
+                    var objectIsNew = true;
+
+                    var idProperty = myObject.GetType().GetProperties().Single(p => p.Name.ToLower() == "id");
+                    var id = idProperty.GetValue(myObject);
+                    foreach (var entry in ChangeTracker.Entries)
+                    {
+                        if (idProperty.GetValue(entry.Key).Equals(id))
+                        {
+                            objectIsNew = false;
+                            objects.Add((T)entry.Key);
+                            break;
+                        }
+                    }
+
+                    if (!objectIsNew)
+                    {
+                        continue;
+                    }
+
+
+                    var changeTrackerEntry = new ChangeTrackerEntry
+                    {
+                        State = ChangeTrackerEntry.States.Unmodified,
+                        Item = myObject,
+                        Originals = new Dictionary<PropertyInfo, object>()
+                    };
+
+                    foreach (var property in properties)
+                    {
+                        var value = reader[property.Name];
+                        property.SetValue(myObject, value);
+                        changeTrackerEntry.Originals.Add(property, property.GetValue(myObject));
+                        objects.Add(myObject);
+                    }
+                }
+            }
+
+            return objects;
         }
 
         public void SubmitChanges()

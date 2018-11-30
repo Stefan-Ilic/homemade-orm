@@ -28,7 +28,7 @@ namespace IntegrationTests
 
 
         [Fact]
-        public void Insert_Update_Delete()
+        public void Insert_Update_Delete_Select()
         {
 
             const string validConnectionString = "server=127.0.0.1;uid=root;pwd=root;database=test";
@@ -126,8 +126,16 @@ namespace IntegrationTests
             orm.ChangeTracker.Entries[person3].State.ShouldBe(ChangeTrackerEntry.States.Deleted);
             context = new MysqlContext(options);
             context.Persons.Count().ShouldBe(2);
+
+            //Select
+            var anotherPerson1 = orm.GetQuery<Person>()
+                .Where(p => p.FirstName == "Mike" &&
+                            p.LastName == "Rosoft")
+                .Where(p => p.Age == newAge).ToList().First();
+
+            anotherPerson1.ShouldNotBeNull();
+            anotherPerson1.Id.ShouldBe(person1.Id);
+            person1.ShouldBe(anotherPerson1);
         }
-
-
     }
 }
