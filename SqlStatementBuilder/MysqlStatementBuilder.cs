@@ -111,6 +111,26 @@ namespace SqlStatementBuilder
             }
         }
 
+        public string DeleteStatement
+        {
+            get
+            {
+                var builder = new StringBuilder();
+                builder.Append("DELETE FROM ");
+                builder.Append(TableName);
+                builder.Append(" WHERE ");
+                foreach (var column in Columns)
+                {
+                    builder.Append(column.Key);
+                    builder.Append("=");
+                    builder.Append(TransformValueForDb(column.Value.Item2));
+                    builder.Append($" {GetBinaryExpressionSymbol(ExpressionType.AndAlso)} ");
+                }
+                builder.Length -= 6;//TODO hacky shit
+                return builder.ToString();
+            }
+        }
+
         public string TableName { get; set; }
         public Type TableType { get; set; }
         public IDictionary<string, (Type, object)> Columns { get; set; } = new Dictionary<string, (Type type, object value)>();

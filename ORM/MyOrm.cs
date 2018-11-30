@@ -198,6 +198,24 @@ namespace ORM
             UpdateUnmodifiedChangeTrackerEntries();
             ApplyInsertedEntries();
             ApplyModifiedEntries();
+            ApplyDeletedEntries();
+        }
+
+        private void ApplyDeletedEntries()
+        {
+            var deletedEntries =
+                ChangeTracker.Entries.Where(x => x.Value.State == ChangeTrackerEntry.States.Deleted);
+
+            foreach (var deletedObject in deletedEntries.Select(x => x.Key))
+            {
+                var builder = new MySqlStatementBuilder
+                {
+                    TableName = OrmUtilities.GetTableName(deletedObject.GetType()),
+                    Columns = OrmUtilities.GetColumns(deletedObject)
+                };
+
+                RunStatement(builder.DeleteStatement);
+            }
         }
 
         private void ApplyModifiedEntries()
@@ -247,6 +265,11 @@ namespace ORM
                     }
                 }
             }
+        }
+
+        public void Delete(object objectToDelete)
+        {
+            ChangeTracker.Entries[objectToDelete].State = ChangeTrackerEntry.States.Deleted;
         }
 
         public ChangeTracker ChangeTracker { get; } = new ChangeTracker();

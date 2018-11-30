@@ -82,6 +82,7 @@ namespace IntegrationTests
             orm.ChangeTracker.EntriesWithId.Count.ShouldBe(3);
             orm.ChangeTracker.Entries.ShouldAllBe(x => x.Value.State == ChangeTrackerEntry.States.Inserted);
 
+            context = new MysqlContext(options);
             context.Persons.ShouldBeEmpty();
 
             orm.SubmitChanges();
@@ -89,6 +90,7 @@ namespace IntegrationTests
             person2.Id.ShouldBe(person1.Id + 1);
             person3.Id.ShouldBe(person2.Id + 1);
 
+            context = new MysqlContext(options);
             context.Persons.Count().ShouldBe(3);
             orm.ChangeTracker.Entries.ShouldAllBe(x => x.Value.State == ChangeTrackerEntry.States.Unmodified);
 
@@ -97,15 +99,33 @@ namespace IntegrationTests
             var newAge = rand.Next(1, int.MaxValue);
             person1.Age = newAge;
 
+            context = new MysqlContext(options);
             context.Persons.Single(x => x.Id == person1.Id).Age.ShouldBe(1337);
             orm.SubmitChanges();
             orm.ChangeTracker.Entries.Count(x => x.Value.State == ChangeTrackerEntry.States.Unmodified).ShouldBe(3);
             context = new MysqlContext(options);
             context.Persons.Single(x => x.Id == person1.Id).Age.ShouldBe(newAge);
+            context = new MysqlContext(options);
             context.Persons.Count().ShouldBe(3);
 
             //Delete
+            context = new MysqlContext(options);
+            context.Persons.Count().ShouldBe(3);
+            orm.ChangeTracker.Entries.ShouldAllBe(x => x.Value.State == ChangeTrackerEntry.States.Unmodified);
 
+            orm.Delete(person3);
+            orm.ChangeTracker.Entries.Count.ShouldBe(3);
+            orm.ChangeTracker.Entries.Values.Count(x => x.State == ChangeTrackerEntry.States.Deleted).ShouldBe(1);
+            orm.ChangeTracker.Entries[person3].State.ShouldBe(ChangeTrackerEntry.States.Deleted);
+            context = new MysqlContext(options);
+            context.Persons.Count().ShouldBe(3);
+
+            orm.SubmitChanges();
+            orm.ChangeTracker.Entries.Count.ShouldBe(3);
+            orm.ChangeTracker.Entries.Values.Count(x => x.State == ChangeTrackerEntry.States.Deleted).ShouldBe(1);
+            orm.ChangeTracker.Entries[person3].State.ShouldBe(ChangeTrackerEntry.States.Deleted);
+            context = new MysqlContext(options);
+            context.Persons.Count().ShouldBe(2);
         }
 
 
