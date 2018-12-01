@@ -4,4 +4,10 @@
     <TargetFramework>netcoreapp2.1</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ORM\ORM.csproj" />
+    <ProjectReference Include="..\SqlStatementBuilder.Interfaces\SqlStatementBuilder.Interfaces.csproj" />
+    <ProjectReference Include="..\SqlStatementBuilder\SqlStatementBuilder.csproj" />
+  </ItemGroup>
+
 </Project>

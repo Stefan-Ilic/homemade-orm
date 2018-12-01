@@ -44,7 +44,6 @@ namespace IntegrationTests
             var orm = new MyOrm(driver, sqlBuilder);
 
             orm.ChangeTracker.Entries.ShouldBeEmpty();
-            orm.ChangeTracker.EntriesWithId.ShouldBeEmpty();
 
             var person1 = new Person
             {
@@ -81,7 +80,6 @@ namespace IntegrationTests
             person3.Id.ShouldBe(-3);
 
             orm.ChangeTracker.Entries.Count.ShouldBe(3);
-            orm.ChangeTracker.EntriesWithId.Count.ShouldBe(3);
             orm.ChangeTracker.Entries.ShouldAllBe(x => x.Value.State == ChangeTrackerEntry.States.Inserted);
 
             GetFreshContext(options).Persons.ShouldBeEmpty();
@@ -160,7 +158,6 @@ namespace IntegrationTests
             var orm = new MyOrm(driver, sqlBuilder);
 
             orm.ChangeTracker.Entries.ShouldBeEmpty();
-            orm.ChangeTracker.EntriesWithId.ShouldBeEmpty();
 
             var person1 = new Person
             {
@@ -191,7 +188,6 @@ namespace IntegrationTests
             GetFreshContext(options).Persons.Count().ShouldBe(3);
 
             orm.ChangeTracker.Entries.ShouldBeEmpty();
-            orm.ChangeTracker.EntriesWithId.ShouldBeEmpty();
 
             var people = orm.GetQuery<Person>().ToList();
 

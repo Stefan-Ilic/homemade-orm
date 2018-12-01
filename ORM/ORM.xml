@@ -4,6 +4,37 @@
         <name>ORM</name>
     </assembly>
     <members>
+        <member name="T:ORM.Attributes.ColumnAttribute">
+            <summary>
+            Provides the ability to change the database column name of a propety
+            </summary>
+        </member>
+        <member name="M:ORM.Attributes.ColumnAttribute.#ctor(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="P:ORM.Attributes.ColumnAttribute.ColumnName">
+            <summary>
+            The column name that is displayed in the database
+            </summary>
+        </member>
+        <member name="T:ORM.Attributes.PrimaryKeyAttribute">
+            <summary>
+            Used to denote the primary key of a class
+            </summary>
+        </member>
+        <member name="T:ORM.Attributes.TableAttribute">
+            <summary>
+            Used to describe a class used as a table
+            </summary>
+        </member>
+        <member name="M:ORM.Attributes.TableAttribute.#ctor(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="P:ORM.Attributes.TableAttribute.TableName">
+            <summary>
+            Used to change the default table name from class name to something else
+            </summary>
+        </member>
         <member name="T:ORM.ChangeTracker">
             <summary>
             Tracks changed of CLR objects known to the ORM
@@ -18,6 +49,232 @@
             <summary>
             Holds ChangeTrackerEntries and the ids and types that belong to them
             </summary>
+        </member>
+        <member name="T:ORM.ChangeTrackerEntry">
+            <summary>
+            Represents an Entry in the ORMs change tracker 
+            </summary>
+        </member>
+        <member name="P:ORM.ChangeTrackerEntry.Item">
+            <summary>
+            The object being tracked
+            </summary>
+        </member>
+        <member name="P:ORM.ChangeTrackerEntry.Originals">
+            <summary>
+            The original values of the object's properties before it was changed
+            </summary>
+        </member>
+        <member name="P:ORM.ChangeTrackerEntry.State">
+            <summary>
+            The current state of the entry
+            </summary>
+        </member>
+        <member name="T:ORM.ChangeTrackerEntry.States">
+            <summary>
+            Describes the current state of the object
+            </summary>
+        </member>
+        <member name="F:ORM.ChangeTrackerEntry.States.Unmodified">
+            <summary>
+            The object is thought to be unmodified
+            It is still possible that it has been modified
+            </summary>
+        </member>
+        <member name="F:ORM.ChangeTrackerEntry.States.Modified">
+            <summary>
+            The object has definitely been modified
+            </summary>
+        </member>
+        <member name="F:ORM.ChangeTrackerEntry.States.Inserted">
+            <summary>
+            The object has been inserted into the ORM
+            </summary>
+        </member>
+        <member name="F:ORM.ChangeTrackerEntry.States.Deleted">
+            <summary>
+            The object has been deleted from the orm
+            </summary>
+        </member>
+        <member name="M:ORM.ChangeTrackerEntry.UpdateOriginals(System.Object)">
+            <summary>
+            Updates the original values of the object's properties
+            after the changes are submitted 
+            </summary>
+            <param name="objectToUpdate"></param>
+        </member>
+        <member name="T:ORM.ExpressionTreeVisitor">
+            <summary>
+            Used to dissect LINQ expressions
+            </summary>
+        </member>
+        <member name="M:ORM.ExpressionTreeVisitor.Visit(System.Linq.Expressions.Expression)">
+            <summary>
+            Generic expression visiter method
+            </summary>
+            <param name="e"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ORM.ExpressionTreeVisitor.VisitBinding(System.Linq.Expressions.MemberBinding)">
+            <summary>
+            Used to visit a Binding
+            </summary>
+            <param name="binding"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ORM.ExpressionTreeVisitor.VisitElementInitializer(System.Linq.Expressions.ElementInit)">
+            <summary>
+            Used to visit an element initializer
+            </summary>
+            <param name="initializer"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ORM.ExpressionTreeVisitor.VisitUnary(System.Linq.Expressions.UnaryExpression)">
+            <summary>
+            used to visit a unary expression
+            </summary>
+            <param name="u"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ORM.ExpressionTreeVisitor.VisitBinary(System.Linq.Expressions.BinaryExpression)">
+            <summary>
+            used to visit a binary expression
+            </summary>
+            <param name="b"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ORM.ExpressionTreeVisitor.VisitTypeIs(System.Linq.Expressions.TypeBinaryExpression)">
+            <summary>
+            Used to visit a type binary expression
+            </summary>
+            <param name="b"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ORM.ExpressionTreeVisitor.VisitConstant(System.Linq.Expressions.ConstantExpression)">
+            <summary>
+            Used to visit a constant expression
+            </summary>
+            <param name="c"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ORM.ExpressionTreeVisitor.VisitConditional(System.Linq.Expressions.ConditionalExpression)">
+            <summary>
+            Used to visit a conditional expression
+            </summary>
+            <param name="c"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ORM.ExpressionTreeVisitor.VisitParameter(System.Linq.Expressions.ParameterExpression)">
+            <summary>
+            Used to visit a parameter expression
+            </summary>
+            <param name="p"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ORM.ExpressionTreeVisitor.VisitMemberAccess(System.Linq.Expressions.MemberExpression)">
+            <summary>
+            Used to visit a member access expression
+            </summary>
+            <param name="m"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ORM.ExpressionTreeVisitor.VisitMethodCall(System.Linq.Expressions.MethodCallExpression)">
+            <summary>
+            Used to visit a method call expression
+            </summary>
+            <param name="m"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ORM.ExpressionTreeVisitor.VisitExpressionList(System.Collections.ObjectModel.ReadOnlyCollection{System.Linq.Expressions.Expression})">
+            <summary>
+            Used to visit a list of expressions
+            </summary>
+            <param name="list"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ORM.ExpressionTreeVisitor.VisitMemberAssignment(System.Linq.Expressions.MemberAssignment)">
+            <summary>
+            Used to visit a member assignment
+            </summary>
+            <param name="assignment"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ORM.ExpressionTreeVisitor.VisitMemberMemberBinding(System.Linq.Expressions.MemberMemberBinding)">
+            <summary>
+            Used to visit a member member binding
+            </summary>
+            <param name="binding"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ORM.ExpressionTreeVisitor.VisitMemberListBinding(System.Linq.Expressions.MemberListBinding)">
+            <summary>
+            Used to visit a member list binding
+            </summary>
+            <param name="binding"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ORM.ExpressionTreeVisitor.VisitBindingList(System.Collections.ObjectModel.ReadOnlyCollection{System.Linq.Expressions.MemberBinding})">
+            <summary>
+            Used to visit a binding list
+            </summary>
+            <param name="list"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ORM.ExpressionTreeVisitor.VisitElementInitializerList(System.Collections.ObjectModel.ReadOnlyCollection{System.Linq.Expressions.ElementInit})">
+            <summary>
+            Used to visit an element initializer list
+            </summary>
+            <param name="list"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ORM.ExpressionTreeVisitor.VisitParameterList(System.Collections.ObjectModel.ReadOnlyCollection{System.Linq.Expressions.ParameterExpression})">
+            <summary>
+            Used to visit a parameter list
+            </summary>
+            <param name="list"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ORM.ExpressionTreeVisitor.VisitLambda(System.Linq.Expressions.LambdaExpression)">
+            <summary>
+            Used to visit a lambda expression
+            </summary>
+            <param name="lambda"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ORM.ExpressionTreeVisitor.VisitNew(System.Linq.Expressions.NewExpression)">
+            <summary>
+            Used to visit a new expression
+            </summary>
+            <param name="newExpression"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ORM.ExpressionTreeVisitor.VisitMemberInit(System.Linq.Expressions.MemberInitExpression)">
+            <summary>
+            Used to visit a member init expression
+            </summary>
+            <param name="init"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ORM.ExpressionTreeVisitor.VisitListInit(System.Linq.Expressions.ListInitExpression)">
+            <summary>
+            Used to visit a list init expression
+            </summary>
+            <param name="init"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ORM.ExpressionTreeVisitor.VisitNewArray(System.Linq.Expressions.NewArrayExpression)">
+            <summary>
+            Used to visit a new array expression
+            </summary>
+            <param name="na"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ORM.ExpressionTreeVisitor.VisitInvocation(System.Linq.Expressions.InvocationExpression)">
+            <summary>
+            Use to visit an invocation expression
+            </summary>
+            <param name="iv"></param>
+            <returns></returns>
         </member>
         <member name="T:ORM.MyOrm">
             <summary>
@@ -63,6 +320,41 @@
             <summary>
             Tracks changes of objects known to the ORM
             </summary>
+        </member>
+        <member name="T:ORM.OrmUtilities">
+            <summary>
+            Provides useful static functions used by multiple classes in the framework
+            </summary>
+        </member>
+        <member name="M:ORM.OrmUtilities.GetColumns(System.Type)">
+            <summary>
+            Returns columns in a format expected by ISqlStatementbuilder
+            </summary>
+            <param name="tableType"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ORM.OrmUtilities.GetColumns(System.Object)">
+            <summary>
+            Returns columns in a format expected by ISqlStatementbuilder
+            </summary>
+            <param name="objectToInsert"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ORM.OrmUtilities.GetTableName(System.Type)">
+            <summary>
+            Returns the class name of a CLR type, or the table name if table attribute is set
+            </summary>
+            <param name="tableType"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ORM.OrmUtilities.GetPrimaryKeyProperty(System.Type)">
+            <summary>
+            Returns the property info of the property marked is primary key
+            If none is marked, returns the property name id
+            Has to be an int
+            </summary>
+            <param name="tableType"></param>
+            <returns></returns>
         </member>
         <member name="T:ORM.QueryableObject`1">
             <summary>

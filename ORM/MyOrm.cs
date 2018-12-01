@@ -57,7 +57,7 @@ namespace ORM
             //}
 
 
-            SetPrimaryKey(objectToInsert);
+            SetId(objectToInsert, --_insertionId);
 
             var changeTrackerEntry = new ChangeTrackerEntry
             {
@@ -67,14 +67,12 @@ namespace ORM
 
             changeTrackerEntry.UpdateOriginals(objectToInsert);
             ChangeTracker.Entries.Add(objectToInsert, changeTrackerEntry);
-            ChangeTracker.EntriesWithId.Add((_insertionId, objectToInsert.GetType()), changeTrackerEntry);
         }
 
-        private static void SetPrimaryKey(object objectToSet)
+        private static void SetId(object objectToSet, int id)
         {
-            _insertionId--;
             var idProperty = OrmUtilities.GetPrimaryKeyProperty(objectToSet.GetType());
-            idProperty.SetValue(objectToSet, _insertionId);
+            idProperty.SetValue(objectToSet, id);
         }
 
         /// <summary>
@@ -199,8 +197,7 @@ namespace ORM
                 _sqlBuilder.Columns = OrmUtilities.GetColumns(objectToInsert);
 
                 var newId = _dbDriver.RunInsertStatement(_sqlBuilder.InsertStatement);
-                var idProperty = OrmUtilities.GetPrimaryKeyProperty(objectToInsert.GetType());
-                idProperty.SetValue(objectToInsert, newId);
+                SetId(objectToInsert, newId);
 
                 ChangeTracker.Entries[objectToInsert].UpdateOriginals(objectToInsert);
                 ChangeTracker.Entries[objectToInsert].State = ChangeTrackerEntry.States.Unmodified;

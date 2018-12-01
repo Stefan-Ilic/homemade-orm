@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Runtime.CompilerServices;
-using System.Text;
-using ExpressionTreeVisitors;
+using ORM;
 using ORM.Attributes;
 using SqlStatementBuilder;
 using SqlStatementBuilder.Interfaces;
 
-namespace ORM
+namespace ExpressionTreeVisitors
 {
     internal class SqlGeneratingExpressionTreeVisitor : ExpressionTreeVisitor
     {
