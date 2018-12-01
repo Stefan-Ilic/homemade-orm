@@ -1,0 +1,87 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>SqlStatementBuilder.Interfaces</name>
+    </assembly>
+    <members>
+        <member name="T:SqlStatementBuilder.Interfaces.ISqlStatementBuilder">
+            <summary>
+            Provides abstractions of SQL statements
+            </summary>
+        </member>
+        <member name="P:SqlStatementBuilder.Interfaces.ISqlStatementBuilder.SelectStatement">
+            <summary>
+            Represents a select statement with the information given
+            </summary>
+        </member>
+        <member name="P:SqlStatementBuilder.Interfaces.ISqlStatementBuilder.InsertStatement">
+            <summary>
+            Represents an insert statement with the information given
+            </summary>
+        </member>
+        <member name="P:SqlStatementBuilder.Interfaces.ISqlStatementBuilder.DeleteStatement">
+            <summary>
+            Represents a delete statement with the information given
+            </summary>
+        </member>
+        <member name="P:SqlStatementBuilder.Interfaces.ISqlStatementBuilder.UpdateStatement">
+            <summary>
+            Represents an update statement with the information given
+            </summary>
+        </member>
+        <member name="P:SqlStatementBuilder.Interfaces.ISqlStatementBuilder.CreateTableStatement">
+            <summary>
+            represents a create table statement with the information given
+            </summary>
+        </member>
+        <member name="P:SqlStatementBuilder.Interfaces.ISqlStatementBuilder.TableName">
+            <summary>
+            The name of the table
+            </summary>
+        </member>
+        <member name="P:SqlStatementBuilder.Interfaces.ISqlStatementBuilder.TableType">
+            <summary>
+            The CLR type of objects of the table
+            </summary>
+        </member>
+        <member name="P:SqlStatementBuilder.Interfaces.ISqlStatementBuilder.Columns">
+            <summary>
+            Represents columns of the table
+            </summary>
+        </member>
+        <member name="M:SqlStatementBuilder.Interfaces.ISqlStatementBuilder.StartCondition">
+            <summary>
+            Starts a condition, meaning a where clause
+            </summary>
+        </member>
+        <member name="M:SqlStatementBuilder.Interfaces.ISqlStatementBuilder.EndCondition">
+            <summary>
+            Ends a condition, meaning a where clause
+            </summary>
+        </member>
+        <member name="M:SqlStatementBuilder.Interfaces.ISqlStatementBuilder.AddBinaryOperatorToCondition(System.Linq.Expressions.ExpressionType)">
+            <summary>
+            Adds a binary operator to a where clause
+            </summary>
+            <param name="expressionType"></param>
+        </member>
+        <member name="M:SqlStatementBuilder.Interfaces.ISqlStatementBuilder.AddStringToCondition(System.String)">
+            <summary>
+            Adds a string to a where clause
+            </summary>
+            <param name="stringToBeAdded"></param>
+        </member>
+        <member name="M:SqlStatementBuilder.Interfaces.ISqlStatementBuilder.AddIntToCondition(System.Int32)">
+            <summary>
+            Adds an int to a where clause
+            </summary>
+            <param name="intToBeAdded"></param>
+        </member>
+        <member name="M:SqlStatementBuilder.Interfaces.ISqlStatementBuilder.AddColumnToCondition(System.String)">
+            <summary>
+            Adds a column to a where clause
+            </summary>
+            <param name="columnToBeAdded"></param>
+        </member>
+    </members>
+</doc>

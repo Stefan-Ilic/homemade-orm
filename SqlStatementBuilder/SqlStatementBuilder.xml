@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>SqlStatementBuilder</name>
+    </assembly>
+    <members>
+        <member name="T:SqlStatementBuilder.MySqlStatementBuilder">
+            <inheritdoc />
+            <summary>
+            Builds SQL statements specific for the MySQL DBMS
+            </summary>
+        </member>
+        <member name="P:SqlStatementBuilder.MySqlStatementBuilder.SelectStatement">
+            <inheritdoc />
+        </member>
+        <member name="P:SqlStatementBuilder.MySqlStatementBuilder.InsertStatement">
+            <inheritdoc />
+        </member>
+        <member name="P:SqlStatementBuilder.MySqlStatementBuilder.CreateTableStatement">
+            <inheritdoc />
+        </member>
+        <member name="P:SqlStatementBuilder.MySqlStatementBuilder.TableExistsStatement">
+            <summary>
+            to be seen
+            </summary>
+        </member>
+        <member name="P:SqlStatementBuilder.MySqlStatementBuilder.UpdateStatement">
+            <inheritdoc />
+        </member>
+        <member name="P:SqlStatementBuilder.MySqlStatementBuilder.DeleteStatement">
+            <inheritdoc />
+        </member>
+        <member name="P:SqlStatementBuilder.MySqlStatementBuilder.TableName">
+            <inheritdoc />
+        </member>
+        <member name="P:SqlStatementBuilder.MySqlStatementBuilder.TableType">
+            <inheritdoc />
+        </member>
+        <member name="P:SqlStatementBuilder.MySqlStatementBuilder.Columns">
+            <inheritdoc />
+        </member>
+        <member name="M:SqlStatementBuilder.MySqlStatementBuilder.StartCondition">
+            <inheritdoc />
+        </member>
+        <member name="M:SqlStatementBuilder.MySqlStatementBuilder.EndCondition">
+            <inheritdoc />
+        </member>
+        <member name="M:SqlStatementBuilder.MySqlStatementBuilder.AddBinaryOperatorToCondition(System.Linq.Expressions.ExpressionType)">
+            <inheritdoc />
+        </member>
+        <member name="M:SqlStatementBuilder.MySqlStatementBuilder.AddStringToCondition(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:SqlStatementBuilder.MySqlStatementBuilder.AddIntToCondition(System.Int32)">
+            <inheritdoc />
+        </member>
+        <member name="M:SqlStatementBuilder.MySqlStatementBuilder.AddColumnToCondition(System.String)">
+            <inheritdoc />
+        </member>
+    </members>
+</doc>

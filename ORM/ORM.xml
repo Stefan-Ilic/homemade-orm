@@ -1,0 +1,89 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>ORM</name>
+    </assembly>
+    <members>
+        <member name="T:ORM.ChangeTracker">
+            <summary>
+            Tracks changed of CLR objects known to the ORM
+            </summary>
+        </member>
+        <member name="P:ORM.ChangeTracker.Entries">
+            <summary>
+            Holds ChangeTrackerEntries and the objects that belong to them
+            </summary>
+        </member>
+        <member name="P:ORM.ChangeTracker.EntriesWithId">
+            <summary>
+            Holds ChangeTrackerEntries and the ids and types that belong to them
+            </summary>
+        </member>
+        <member name="T:ORM.MyOrm">
+            <summary>
+            The actual class used as an ORM
+            </summary>
+        </member>
+        <member name="M:ORM.MyOrm.#ctor(DatabaseDriver.Interfaces.IDatabaseDriver,SqlStatementBuilder.Interfaces.ISqlStatementBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:ORM.MyOrm.GetQuery``1">
+            <summary>
+            Returns a queryable that enumerates to a collection with database objects
+            </summary>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:ORM.MyOrm.Insert(System.Object)">
+            <summary>
+            Used to add objects to the ORM
+            </summary>
+            <param name="objectToInsert"></param>
+        </member>
+        <member name="M:ORM.MyOrm.Delete(System.Object)">
+            <summary>
+            Used to delete objects from the ORM
+            </summary>
+            <param name="objectToDelete"></param>
+        </member>
+        <member name="M:ORM.MyOrm.Select``1(SqlStatementBuilder.Interfaces.ISqlStatementBuilder)">
+            <summary>
+            Used by the query provider to materialize database objects
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="builder"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ORM.MyOrm.SubmitChanges">
+            <summary>
+            Writes changes to the database
+            </summary>
+        </member>
+        <member name="P:ORM.MyOrm.ChangeTracker">
+            <summary>
+            Tracks changes of objects known to the ORM
+            </summary>
+        </member>
+        <member name="T:ORM.QueryableObject`1">
+            <summary>
+            Provides a query to use with select statements
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="M:ORM.QueryableObject`1.#ctor(ORM.MyOrm)">
+            <inheritdoc />
+        </member>
+        <member name="P:ORM.QueryableObject`1.ElementType">
+            <inheritdoc />
+        </member>
+        <member name="P:ORM.QueryableObject`1.Expression">
+            <inheritdoc />
+        </member>
+        <member name="P:ORM.QueryableObject`1.Provider">
+            <inheritdoc />
+        </member>
+        <member name="M:ORM.QueryableObject`1.GetEnumerator">
+            <inheritdoc />
+        </member>
+    </members>
+</doc>

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Linq;
+using DatabaseDriver;
 using ORM;
+using SqlStatementBuilder;
 
 namespace RunnableProjectForTesting
 {
@@ -8,7 +10,9 @@ namespace RunnableProjectForTesting
     {
         private static void Main(string[] args)
         {
-            var orm = new MyOrm("");
+            var sqlBuilder = new MySqlStatementBuilder();
+            var driver = new MySqlDriver("");
+            var orm = new MyOrm(driver, sqlBuilder);
             var qry = orm.GetQuery<Person>();
 
             var filtered = qry

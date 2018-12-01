@@ -7,15 +7,22 @@ using MySql.Data.MySqlClient;
 
 namespace DatabaseDriver
 {
+    /// <inheritdoc />
+    /// <summary>
+    /// A concrete database driver for the MySQL DBMS
+    /// </summary>
     public class MySqlDriver : IDatabaseDriver
     {
         private readonly string _connectionString;
 
+
+        /// <inheritdoc />
         public MySqlDriver(string connectionString)
         {
             _connectionString = connectionString;
         }
 
+        /// <inheritdoc />
         public int RunInsertStatement(string statement)
         {
             if (!statement.ToLower().Contains("insert"))
@@ -35,6 +42,7 @@ namespace DatabaseDriver
             return newId;
         }
 
+        /// <inheritdoc />
         public void RunUpdateStatement(string statement)
         {
             if (!statement.ToLower().Contains("update"))
@@ -44,6 +52,7 @@ namespace DatabaseDriver
             RunStatement(statement);
         }
 
+        /// <inheritdoc />
         public void RunDeleteStatement(string statement)
         {
             if (!statement.ToLower().Contains("delete"))
@@ -53,6 +62,7 @@ namespace DatabaseDriver
             RunStatement(statement);
         }
 
+        /// <inheritdoc />
         public void RunStatement(string statement)
         {
             using (var connection = new MySqlConnection(_connectionString))
@@ -63,6 +73,7 @@ namespace DatabaseDriver
             }
         }
 
+        /// <inheritdoc />
         public IList<IDictionary<string, object>> RunSelectStatement(string statement)
         {
             var list = new List<IDictionary<string, object>>();

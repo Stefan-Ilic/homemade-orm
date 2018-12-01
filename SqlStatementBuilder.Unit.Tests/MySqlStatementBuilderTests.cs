@@ -22,7 +22,7 @@ namespace SqlStatementBuilder.Unit.Tests
             //    }
             //};
 
-            const string expected = @"CREATE TABLE people (id INT PRIMARY KEY,firstname TEXT,lastname TEXT,age INT)";
+            //const string expected = @"CREATE TABLE people (id INT PRIMARY KEY,firstname TEXT,lastname TEXT,age INT)";
             //builder.Statement.ToLower().ShouldBe(expected.ToLower());
         }
 

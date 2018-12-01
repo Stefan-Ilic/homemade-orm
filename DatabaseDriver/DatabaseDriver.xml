@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>DatabaseDriver</name>
+    </assembly>
+    <members>
+        <member name="T:DatabaseDriver.MySqlDriver">
+            <inheritdoc />
+            <summary>
+            A concrete database driver for the MySQL DBMS
+            </summary>
+        </member>
+        <member name="M:DatabaseDriver.MySqlDriver.#ctor(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:DatabaseDriver.MySqlDriver.RunInsertStatement(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:DatabaseDriver.MySqlDriver.RunUpdateStatement(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:DatabaseDriver.MySqlDriver.RunDeleteStatement(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:DatabaseDriver.MySqlDriver.RunStatement(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:DatabaseDriver.MySqlDriver.RunSelectStatement(System.String)">
+            <inheritdoc />
+        </member>
+    </members>
+</doc>

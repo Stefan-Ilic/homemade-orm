@@ -7,8 +7,16 @@ using ORM.Attributes;
 
 namespace ORM
 {
+    /// <summary>
+    /// Provides useful static functions used by multiple classes in the framework
+    /// </summary>
     public abstract class OrmUtilities
     {
+        /// <summary>
+        /// Returns columns in a format expected by ISqlStatementbuilder
+        /// </summary>
+        /// <param name="tableType"></param>
+        /// <returns></returns>
         public static Dictionary<string, (Type, object)> GetColumns(Type tableType)
         {
             var dictionary = new Dictionary<string, (Type type, object value)>();
@@ -27,6 +35,11 @@ namespace ORM
             return dictionary;
         }
 
+        /// <summary>
+        /// Returns columns in a format expected by ISqlStatementbuilder
+        /// </summary>
+        /// <param name="objectToInsert"></param>
+        /// <returns></returns>
         public static Dictionary<string, (Type, object)> GetColumns(object objectToInsert)
         {
             var dictionary = new Dictionary<string, (Type type, object value)>();
@@ -44,6 +57,11 @@ namespace ORM
             return dictionary;
         }
 
+        /// <summary>
+        /// Returns the class name of a CLR type, or the table name if table attribute is set
+        /// </summary>
+        /// <param name="tableType"></param>
+        /// <returns></returns>
         public static string GetTableName(Type tableType)
         {
             var className = tableType.Name;
@@ -51,6 +69,13 @@ namespace ORM
             return tableAttributeName ?? className;
         }
 
+        /// <summary>
+        /// Returns the property info of the property marked is primary key
+        /// If none is marked, returns the property name id
+        /// Has to be an int
+        /// </summary>
+        /// <param name="tableType"></param>
+        /// <returns></returns>
         public static PropertyInfo GetPrimaryKeyProperty(Type tableType)
         {
             var properties = tableType.GetProperties();

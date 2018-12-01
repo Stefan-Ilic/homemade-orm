@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>DatabaseDriver.Interfaces</name>
+    </assembly>
+    <members>
+        <member name="T:DatabaseDriver.Interfaces.IDatabaseDriver">
+            <summary>
+            Represents the bridge between ORM and actual database.
+            The implementation holds the database connection
+            </summary>
+        </member>
+        <member name="M:DatabaseDriver.Interfaces.IDatabaseDriver.RunInsertStatement(System.String)">
+            <summary>
+            Conducts an insert statement on the database
+            </summary>
+            <param name="statement"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DatabaseDriver.Interfaces.IDatabaseDriver.RunUpdateStatement(System.String)">
+            <summary>
+            Conducts an update statement on the database
+            </summary>
+            <param name="statement"></param>
+        </member>
+        <member name="M:DatabaseDriver.Interfaces.IDatabaseDriver.RunDeleteStatement(System.String)">
+            <summary>
+            Conducts a delete statement on the database
+            </summary>
+            <param name="statement"></param>
+        </member>
+        <member name="M:DatabaseDriver.Interfaces.IDatabaseDriver.RunStatement(System.String)">
+            <summary>
+            Conducts any statement it receives on the database
+            </summary>
+            <param name="statement"></param>
+        </member>
+        <member name="M:DatabaseDriver.Interfaces.IDatabaseDriver.RunSelectStatement(System.String)">
+            <summary>
+            Conducts a select statement on the database.
+            Returns sufficient information to construct CLR objects
+            </summary>
+            <param name="statement"></param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>

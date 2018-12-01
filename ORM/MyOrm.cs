@@ -16,17 +16,26 @@ using SqlStatementBuilder.Interfaces;
 
 namespace ORM
 {
+    /// <summary>
+    /// The actual class used as an ORM
+    /// </summary>
     public class MyOrm
     {
         private readonly IDatabaseDriver _dbDriver;
         private readonly ISqlStatementBuilder _sqlBuilder;
 
+        /// <inheritdoc />
         public MyOrm(IDatabaseDriver driver, ISqlStatementBuilder sqlBuilder)
         {
             _dbDriver = driver;
             _sqlBuilder = sqlBuilder;
         }
 
+        /// <summary>
+        /// Returns a queryable that enumerates to a collection with database objects
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
         public IQueryable<T> GetQuery<T>()
         {
             return new QueryableObject<T>(this);
@@ -34,6 +43,10 @@ namespace ORM
 
         private static int _insertionId; //TODO thread safety
 
+        /// <summary>
+        /// Used to add objects to the ORM
+        /// </summary>
+        /// <param name="objectToInsert"></param>
         public void Insert(object objectToInsert)
         {
             var tableName = OrmUtilities.GetTableName(objectToInsert.GetType());
@@ -64,6 +77,10 @@ namespace ORM
             idProperty.SetValue(objectToSet, _insertionId);
         }
 
+        /// <summary>
+        /// Used to delete objects from the ORM
+        /// </summary>
+        /// <param name="objectToDelete"></param>
         public void Delete(object objectToDelete)
         {
             ChangeTracker.Entries[objectToDelete].State = ChangeTrackerEntry.States.Deleted;
@@ -90,6 +107,12 @@ namespace ORM
             //    return RunStatement(builder.TableExistsStatement) != 0;
         }
 
+        /// <summary>
+        /// Used by the query provider to materialize database objects
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="builder"></param>
+        /// <returns></returns>
         public List<T> Select<T>(ISqlStatementBuilder builder)
         {
             var selectResults = _dbDriver.RunSelectStatement(builder.SelectStatement);
@@ -132,6 +155,9 @@ namespace ORM
             return objects;
         }
 
+        /// <summary>
+        /// Writes changes to the database
+        /// </summary>
         public void SubmitChanges()
         {
             UpdateUnmodifiedEntries();
@@ -217,6 +243,9 @@ namespace ORM
             return myObjects;
         }
 
+        /// <summary>
+        /// Tracks changes of objects known to the ORM
+        /// </summary>
         public ChangeTracker ChangeTracker { get; } = new ChangeTracker();
     }
 }

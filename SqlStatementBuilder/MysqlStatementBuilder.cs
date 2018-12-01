@@ -7,11 +7,16 @@ using SqlStatementBuilder.Interfaces;
 
 namespace SqlStatementBuilder
 {
+    /// <inheritdoc />
+    /// <summary>
+    /// Builds SQL statements specific for the MySQL DBMS
+    /// </summary>
     public class MySqlStatementBuilder : ISqlStatementBuilder
     {
         private readonly StringBuilder _whereClauseBuilder = new StringBuilder();
         private bool _hasWhereClause;
 
+        /// <inheritdoc />
         public string SelectStatement
         {
             get
@@ -31,6 +36,7 @@ namespace SqlStatementBuilder
             }
         }
 
+        /// <inheritdoc />
         public string InsertStatement
         {
             get
@@ -49,6 +55,7 @@ namespace SqlStatementBuilder
             }
         }
 
+        /// <inheritdoc />
         public string CreateTableStatement
         {
             get
@@ -75,6 +82,9 @@ namespace SqlStatementBuilder
             }
         }
 
+        /// <summary>
+        /// to be seen
+        /// </summary>
         public string TableExistsStatement
         {
             get
@@ -87,6 +97,7 @@ namespace SqlStatementBuilder
             }
         }
 
+        /// <inheritdoc />
         public string UpdateStatement
         {
             get
@@ -111,6 +122,7 @@ namespace SqlStatementBuilder
             }
         }
 
+        /// <inheritdoc />
         public string DeleteStatement
         {
             get
@@ -131,10 +143,16 @@ namespace SqlStatementBuilder
             }
         }
 
+        /// <inheritdoc />
         public string TableName { get; set; }
+
+        /// <inheritdoc />
         public Type TableType { get; set; }
+
+        /// <inheritdoc />
         public IDictionary<string, (Type, object)> Columns { get; set; } = new Dictionary<string, (Type type, object value)>();
 
+        /// <inheritdoc />
         public void StartCondition()
         {
             if (_whereClauseBuilder.ToString().EndsWith(')'))
@@ -145,11 +163,13 @@ namespace SqlStatementBuilder
             _hasWhereClause = true;
         }
 
+        /// <inheritdoc />
         public void EndCondition()
         {
             _whereClauseBuilder.Append(")");
         }
 
+        /// <inheritdoc />
         public void AddBinaryOperatorToCondition(ExpressionType expressionType)
         {
             _whereClauseBuilder.Append(GetBinaryExpressionSymbol(expressionType));
@@ -181,6 +201,7 @@ namespace SqlStatementBuilder
             }
         }
 
+        /// <inheritdoc />
         public void AddStringToCondition(string stringToBeAdded)
         {
             _whereClauseBuilder.Append("'");
@@ -188,17 +209,19 @@ namespace SqlStatementBuilder
             _whereClauseBuilder.Append("'");
         }
 
+        /// <inheritdoc />
         public void AddIntToCondition(int intToBeAdded)
         {
             _whereClauseBuilder.Append(intToBeAdded);
         }
 
+        /// <inheritdoc />
         public void AddColumnToCondition(string columnToBeAdded)
         {
             _whereClauseBuilder.Append(columnToBeAdded);
         }
 
-        private object TransformValueForDb(object initialValue)
+        private static object TransformValueForDb(object initialValue)
         {
             switch (initialValue)
             {
@@ -212,7 +235,7 @@ namespace SqlStatementBuilder
 
         }
 
-        private string TransformDataTypeForDb(Type type)
+        private static string TransformDataTypeForDb(Type type)
         {
             if (type == typeof(string))
             {
