@@ -3,6 +3,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using ORM.Attributes;
+using ORM.Utilities;
 using SqlStatementBuilder;
 using SqlStatementBuilder.Interfaces;
 

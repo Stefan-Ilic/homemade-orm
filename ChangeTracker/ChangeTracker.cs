@@ -1,14 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using ChangerTracker.Interfaces;
+using ChangeTracker.Entities;
+using ORM;
+using ORM.Utilities;
 
-namespace ORM
+namespace ChangeTracker
 {
     /// <summary>
     /// Tracks changed of CLR objects known to the ORM
     /// </summary>
-    public class ChangeTracker
+    public class ChangeTracker : IChangeTracker
     {
 
         private readonly Dictionary<object, ChangeTrackerEntry> _entries =

@@ -4,146 +4,6 @@
         <name>ORM</name>
     </assembly>
     <members>
-        <member name="T:ORM.Attributes.ColumnAttribute">
-            <summary>
-            Provides the ability to change the database column name of a propety
-            </summary>
-        </member>
-        <member name="M:ORM.Attributes.ColumnAttribute.#ctor(System.String)">
-            <inheritdoc />
-        </member>
-        <member name="P:ORM.Attributes.ColumnAttribute.ColumnName">
-            <summary>
-            The column name that is displayed in the database
-            </summary>
-        </member>
-        <member name="T:ORM.Attributes.PrimaryKeyAttribute">
-            <summary>
-            Used to denote the primary key of a class
-            </summary>
-        </member>
-        <member name="T:ORM.Attributes.TableAttribute">
-            <summary>
-            Used to describe a class used as a table
-            </summary>
-        </member>
-        <member name="M:ORM.Attributes.TableAttribute.#ctor(System.String)">
-            <inheritdoc />
-        </member>
-        <member name="P:ORM.Attributes.TableAttribute.TableName">
-            <summary>
-            Used to change the default table name from class name to something else
-            </summary>
-        </member>
-        <member name="T:ORM.ChangeTracker">
-            <summary>
-            Tracks changed of CLR objects known to the ORM
-            </summary>
-        </member>
-        <member name="M:ORM.ChangeTracker.GetEntry(System.Object)">
-            <summary>
-            Returns ChangeTrackerEntry with of object
-            </summary>
-            <param name="obj"></param>
-            <returns></returns>
-        </member>
-        <member name="M:ORM.ChangeTracker.GetEntry(System.Int32,System.Type)">
-            <summary>
-            Returns ChangeTrackerEntry with id and type
-            </summary>
-            <param name="id"></param>
-            <param name="type"></param>
-        </member>
-        <member name="P:ORM.ChangeTracker.Entries">
-            <summary>
-            Returns all change tracker entries
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:ORM.ChangeTracker.AddEntry(ORM.ChangeTrackerEntry)">
-            <summary>
-            Adds an entry to the change tracker
-            </summary>
-            <param name="entry"></param>
-        </member>
-        <member name="P:ORM.ChangeTracker.Count">
-            <summary>
-            The number of entries tracked
-            </summary>
-        </member>
-        <member name="P:ORM.ChangeTracker.InsertedObjects">
-            <summary>
-            Get all entries with State inserted
-            </summary>
-        </member>
-        <member name="P:ORM.ChangeTracker.UnmodifiedObjects">
-            <summary>
-            Get all entries with State unmodified
-            </summary>
-        </member>
-        <member name="P:ORM.ChangeTracker.DeletedObjects">
-            <summary>
-            Get all entries with State deleted
-            </summary>
-        </member>
-        <member name="P:ORM.ChangeTracker.ModifiedObjects">
-            <summary>
-            Get all entries with State modified
-            </summary>
-        </member>
-        <member name="T:ORM.ChangeTrackerEntry">
-            <summary>
-            Represents an Entry in the ORMs change tracker 
-            </summary>
-        </member>
-        <member name="P:ORM.ChangeTrackerEntry.Item">
-            <summary>
-            The object being tracked
-            </summary>
-        </member>
-        <member name="P:ORM.ChangeTrackerEntry.Originals">
-            <summary>
-            The original values of the object's properties before it was changed
-            </summary>
-        </member>
-        <member name="P:ORM.ChangeTrackerEntry.State">
-            <summary>
-            The current state of the entry
-            </summary>
-        </member>
-        <member name="T:ORM.ChangeTrackerEntry.States">
-            <summary>
-            Describes the current state of the object
-            </summary>
-        </member>
-        <member name="F:ORM.ChangeTrackerEntry.States.Unmodified">
-            <summary>
-            The object is thought to be unmodified
-            It is still possible that it has been modified
-            </summary>
-        </member>
-        <member name="F:ORM.ChangeTrackerEntry.States.Modified">
-            <summary>
-            The object has definitely been modified
-            </summary>
-        </member>
-        <member name="F:ORM.ChangeTrackerEntry.States.Inserted">
-            <summary>
-            The object has been inserted into the ORM
-            </summary>
-        </member>
-        <member name="F:ORM.ChangeTrackerEntry.States.Deleted">
-            <summary>
-            The object has been deleted from the orm
-            </summary>
-        </member>
-        <member name="M:ORM.ChangeTrackerEntry.UpdateOriginals(System.Object)">
-            <summary>
-            Updates the original values of the object's properties
-            after the changes are submitted 
-            </summary>
-            <param name="objectToUpdate"></param>
-        </member>
         <member name="T:ORM.ExpressionTreeVisitor">
             <summary>
             Used to dissect LINQ expressions
@@ -322,7 +182,7 @@
             The actual class used as an ORM
             </summary>
         </member>
-        <member name="M:ORM.MyOrm.#ctor(DatabaseDriver.Interfaces.IDatabaseDriver,SqlStatementBuilder.Interfaces.ISqlStatementBuilder)">
+        <member name="M:ORM.MyOrm.#ctor(DatabaseDriver.Interfaces.IDatabaseDriver,SqlStatementBuilder.Interfaces.ISqlStatementBuilder,ChangerTracker.Interfaces.IChangeTracker)">
             <inheritdoc />
         </member>
         <member name="M:ORM.MyOrm.GetQuery``1">
@@ -361,41 +221,6 @@
             <summary>
             Tracks changes of objects known to the ORM
             </summary>
-        </member>
-        <member name="T:ORM.OrmUtilities">
-            <summary>
-            Provides useful static functions used by multiple classes in the framework
-            </summary>
-        </member>
-        <member name="M:ORM.OrmUtilities.GetColumns(System.Type)">
-            <summary>
-            Returns columns in a format expected by ISqlStatementbuilder
-            </summary>
-            <param name="tableType"></param>
-            <returns></returns>
-        </member>
-        <member name="M:ORM.OrmUtilities.GetColumns(System.Object)">
-            <summary>
-            Returns columns in a format expected by ISqlStatementbuilder
-            </summary>
-            <param name="objectToInsert"></param>
-            <returns></returns>
-        </member>
-        <member name="M:ORM.OrmUtilities.GetTableName(System.Type)">
-            <summary>
-            Returns the class name of a CLR type, or the table name if table attribute is set
-            </summary>
-            <param name="tableType"></param>
-            <returns></returns>
-        </member>
-        <member name="M:ORM.OrmUtilities.GetPrimaryKeyProperty(System.Type)">
-            <summary>
-            Returns the property info of the property marked is primary key
-            If none is marked, returns the property name id
-            Has to be an int
-            </summary>
-            <param name="tableType"></param>
-            <returns></returns>
         </member>
         <member name="T:ORM.QueryableObject`1">
             <summary>

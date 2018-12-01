@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ChangerTracker.Interfaces;
+using ChangeTracker.Entities;
 using DatabaseDriver;
 using Microsoft.EntityFrameworkCore;
 using ORM;
@@ -41,7 +43,8 @@ namespace IntegrationTests
 
             var driver = new MySqlDriver(validConnectionString);
             var sqlBuilder = new MySqlStatementBuilder();
-            var orm = new MyOrm(driver, sqlBuilder);
+            var changeTracker = new ChangeTracker.ChangeTracker();
+            var orm = new MyOrm(driver, sqlBuilder, changeTracker);
 
             orm.ChangeTracker.Count.ShouldBe(0);
 
@@ -156,7 +159,8 @@ namespace IntegrationTests
 
             var driver = new MySqlDriver(validConnectionString);
             var sqlBuilder = new MySqlStatementBuilder();
-            var orm = new MyOrm(driver, sqlBuilder);
+            var changeTracker = new ChangeTracker.ChangeTracker();
+            var orm = new MyOrm(driver, sqlBuilder, changeTracker);
 
             orm.ChangeTracker.Entries.ShouldBeEmpty();
 

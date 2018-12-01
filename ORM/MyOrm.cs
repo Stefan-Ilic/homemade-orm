@@ -7,10 +7,13 @@ using System.Linq;
 using System.Net.Sockets;
 using System.Reflection;
 using System.Text;
+using ChangerTracker.Interfaces;
+using ChangeTracker.Entities;
 using DatabaseDriver;
 using DatabaseDriver.Interfaces;
 using MySql.Data.MySqlClient;
 using ORM.Attributes;
+using ORM.Utilities;
 using SqlStatementBuilder;
 using SqlStatementBuilder.Interfaces;
 
@@ -25,10 +28,14 @@ namespace ORM
         private readonly ISqlStatementBuilder _sqlBuilder;
 
         /// <inheritdoc />
-        public MyOrm(IDatabaseDriver driver, ISqlStatementBuilder sqlBuilder)
+        public MyOrm(
+            IDatabaseDriver driver, 
+            ISqlStatementBuilder sqlBuilder, 
+            IChangeTracker changeTracker)
         {
             _dbDriver = driver;
             _sqlBuilder = sqlBuilder;
+            ChangeTracker = changeTracker;
         }
 
         /// <summary>
@@ -240,6 +247,6 @@ namespace ORM
         /// <summary>
         /// Tracks changes of objects known to the ORM
         /// </summary>
-        public ChangeTracker ChangeTracker { get; } = new ChangeTracker();
+        public IChangeTracker ChangeTracker { get; }
     }
 }

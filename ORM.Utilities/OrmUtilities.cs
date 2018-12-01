@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using ORM.Attributes;
 
-namespace ORM
+namespace ORM.Utilities
 {
     /// <summary>
     /// Provides useful static functions used by multiple classes in the framework

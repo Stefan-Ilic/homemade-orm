@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using ChangerTracker.Interfaces;
 using DatabaseDriver;
 using ORM;
 using SqlStatementBuilder;
@@ -12,7 +13,8 @@ namespace RunnableProjectForTesting
         {
             var sqlBuilder = new MySqlStatementBuilder();
             var driver = new MySqlDriver("");
-            var orm = new MyOrm(driver, sqlBuilder);
+            IChangeTracker changeTracker = new ChangeTracker.ChangeTracker();
+            var orm = new MyOrm(driver, sqlBuilder, changeTracker);
             var qry = orm.GetQuery<Person>();
 
             var filtered = qry
