@@ -2171,10 +2171,35 @@
           "build/netcoreapp1.0/xunit.runner.visualstudio.props": {}
         }
       },
+      "DatabaseDriver/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v2.1",
+        "dependencies": {
+          "DatabaseDriver.Interfaces": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/DatabaseDriver.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/DatabaseDriver.dll": {}
+        }
+      },
+      "DatabaseDriver.Interfaces/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v2.1",
+        "compile": {
+          "bin/placeholder/DatabaseDriver.Interfaces.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/DatabaseDriver.Interfaces.dll": {}
+        }
+      },
       "ORM/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v2.1",
         "dependencies": {
+          "DatabaseDriver": "1.0.0",
+          "DatabaseDriver.Interfaces": "1.0.0",
           "MySqlConnector": "0.46.0",
           "SqlStatementBuilder": "1.0.0",
           "SqlStatementBuilder.Interfaces": "1.0.0",
@@ -7245,6 +7270,16 @@
         "xunit.runner.visualstudio.2.3.1.nupkg.sha512",
         "xunit.runner.visualstudio.nuspec"
       ]
+    },
+    "DatabaseDriver/1.0.0": {
+      "type": "project",
+      "path": "../DatabaseDriver/DatabaseDriver.csproj",
+      "msbuildProject": "../DatabaseDriver/DatabaseDriver.csproj"
+    },
+    "DatabaseDriver.Interfaces/1.0.0": {
+      "type": "project",
+      "path": "../DatabaseDriver.Interfaces/DatabaseDriver.Interfaces.csproj",
+      "msbuildProject": "../DatabaseDriver.Interfaces/DatabaseDriver.Interfaces.csproj"
     },
     "ORM/1.0.0": {
       "type": "project",

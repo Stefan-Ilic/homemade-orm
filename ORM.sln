@@ -9,13 +9,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RunnableProjectForTesting",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IntegrationTests", "IntegrationTests\IntegrationTests.csproj", "{F7231FB6-3ACA-4B9D-915A-4322491218A6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DatabaseDriver.Interfaces", "DatabaseDriver.Interfaces\DatabaseDriver.Interfaces.csproj", "{0835D927-56F3-4CBE-8625-1E12DACD8CA8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DatabaseDriver.Interfaces", "DatabaseDriver.Interfaces\DatabaseDriver.Interfaces.csproj", "{0835D927-56F3-4CBE-8625-1E12DACD8CA8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SqlStatementBuilder.Interfaces", "SqlStatementBuilder.Interfaces\SqlStatementBuilder.Interfaces.csproj", "{6E81EE79-EBAD-40C0-878B-0CE8AAA7F029}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SqlStatementBuilder.Interfaces", "SqlStatementBuilder.Interfaces\SqlStatementBuilder.Interfaces.csproj", "{6E81EE79-EBAD-40C0-878B-0CE8AAA7F029}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SqlStatementBuilder", "SqlStatementBuilder\SqlStatementBuilder.csproj", "{2C935F26-373F-4A45-B87E-14CE32BEECCC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SqlStatementBuilder", "SqlStatementBuilder\SqlStatementBuilder.csproj", "{2C935F26-373F-4A45-B87E-14CE32BEECCC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SqlStatementBuilder.Unit.Tests", "SqlStatementBuilder.Unit.Tests\SqlStatementBuilder.Unit.Tests.csproj", "{CBFD4C0F-E440-4B40-AEF3-81DDD7C5E8B2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SqlStatementBuilder.Unit.Tests", "SqlStatementBuilder.Unit.Tests\SqlStatementBuilder.Unit.Tests.csproj", "{CBFD4C0F-E440-4B40-AEF3-81DDD7C5E8B2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DatabaseDriver", "DatabaseDriver\DatabaseDriver.csproj", "{953F099A-E5D7-4A59-B247-F7A915603EE3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,6 +53,10 @@ Global
 		{CBFD4C0F-E440-4B40-AEF3-81DDD7C5E8B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CBFD4C0F-E440-4B40-AEF3-81DDD7C5E8B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CBFD4C0F-E440-4B40-AEF3-81DDD7C5E8B2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{953F099A-E5D7-4A59-B247-F7A915603EE3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{953F099A-E5D7-4A59-B247-F7A915603EE3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{953F099A-E5D7-4A59-B247-F7A915603EE3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{953F099A-E5D7-4A59-B247-F7A915603EE3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

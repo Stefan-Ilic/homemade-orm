@@ -11,6 +11,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\DatabaseDriver.Interfaces\DatabaseDriver.Interfaces.csproj" />
+    <ProjectReference Include="..\DatabaseDriver\DatabaseDriver.csproj" />
     <ProjectReference Include="..\SqlStatementBuilder.Interfaces\SqlStatementBuilder.Interfaces.csproj" />
     <ProjectReference Include="..\SqlStatementBuilder\SqlStatementBuilder.csproj" />
   </ItemGroup>

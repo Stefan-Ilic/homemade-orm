@@ -6,6 +6,10 @@ namespace DatabaseDriver.Interfaces
 {
     public interface IDatabaseDriver
     {
-        void RunStatementOnDatabase(string statement);
+        int RunInsertStatement(string statement);
+        void RunUpdateStatement(string statement);
+        void RunDeleteStatement(string statement);
+        void RunStatement(string statement);
+        IList<IDictionary<string, object>> RunSelectStatement(string statement);
     }
 }
