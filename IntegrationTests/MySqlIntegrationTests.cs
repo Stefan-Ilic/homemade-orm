@@ -43,7 +43,7 @@ namespace IntegrationTests
             var sqlBuilder = new MySqlStatementBuilder();
             var orm = new MyOrm(driver, sqlBuilder);
 
-            orm.ChangeTracker.Entries.ShouldBeEmpty();
+            orm.ChangeTracker.Count.ShouldBe(0);
 
             var person1 = new Person
             {
@@ -79,8 +79,8 @@ namespace IntegrationTests
             orm.Insert(person3);
             person3.Id.ShouldBe(-3);
 
-            orm.ChangeTracker.Entries.Count.ShouldBe(3);
-            orm.ChangeTracker.Entries.ShouldAllBe(x => x.Value.State == ChangeTrackerEntry.States.Inserted);
+            orm.ChangeTracker.Count.ShouldBe(3);
+            orm.ChangeTracker.InsertedObjects.Count().ShouldBe(3);
 
             GetFreshContext(options).Persons.ShouldBeEmpty();
 
@@ -90,7 +90,8 @@ namespace IntegrationTests
             person3.Id.ShouldBe(person2.Id + 1);
 
             GetFreshContext(options).Persons.Count().ShouldBe(3);
-            orm.ChangeTracker.Entries.ShouldAllBe(x => x.Value.State == ChangeTrackerEntry.States.Unmodified);
+            orm.ChangeTracker.InsertedObjects.ShouldBeEmpty();
+            orm.ChangeTracker.UnmodifiedObjects.Count().ShouldBe(3);
 
             //Update
             var rand = new Random();
@@ -99,24 +100,24 @@ namespace IntegrationTests
 
             GetFreshContext(options).Persons.Single(x => x.Id == person1.Id).Age.ShouldBe(1337);
             orm.SubmitChanges();
-            orm.ChangeTracker.Entries.Count(x => x.Value.State == ChangeTrackerEntry.States.Unmodified).ShouldBe(3);
+            orm.ChangeTracker.UnmodifiedObjects.Count().ShouldBe(3);
             GetFreshContext(options).Persons.Single(x => x.Id == person1.Id).Age.ShouldBe(newAge);
             GetFreshContext(options).Persons.Count().ShouldBe(3);
 
             //Delete
             GetFreshContext(options).Persons.Count().ShouldBe(3);
-            orm.ChangeTracker.Entries.ShouldAllBe(x => x.Value.State == ChangeTrackerEntry.States.Unmodified);
+            orm.ChangeTracker.UnmodifiedObjects.Count().ShouldBe(3);
 
             orm.Delete(person3);
-            orm.ChangeTracker.Entries.Count.ShouldBe(3);
-            orm.ChangeTracker.Entries.Values.Count(x => x.State == ChangeTrackerEntry.States.Deleted).ShouldBe(1);
-            orm.ChangeTracker.Entries[person3].State.ShouldBe(ChangeTrackerEntry.States.Deleted);
+            orm.ChangeTracker.GetAllEntries().Count().ShouldBe(3);
+            orm.ChangeTracker.DeletedObjects.Count().ShouldBe(1);
+            orm.ChangeTracker.GetEntry(person3).State.ShouldBe(ChangeTrackerEntry.States.Deleted);
             GetFreshContext(options).Persons.Count().ShouldBe(3);
 
             orm.SubmitChanges();
-            orm.ChangeTracker.Entries.Count.ShouldBe(3);
-            orm.ChangeTracker.Entries.Values.Count(x => x.State == ChangeTrackerEntry.States.Deleted).ShouldBe(1);
-            orm.ChangeTracker.Entries[person3].State.ShouldBe(ChangeTrackerEntry.States.Deleted);
+            orm.ChangeTracker.GetAllEntries().Count().ShouldBe(3);
+            orm.ChangeTracker.DeletedObjects.Count().ShouldBe(1);
+            orm.ChangeTracker.GetEntry(person3).State.ShouldBe(ChangeTrackerEntry.States.Deleted);
             GetFreshContext(options).Persons.Count().ShouldBe(2);
 
             //Select
@@ -157,7 +158,7 @@ namespace IntegrationTests
             var sqlBuilder = new MySqlStatementBuilder();
             var orm = new MyOrm(driver, sqlBuilder);
 
-            orm.ChangeTracker.Entries.ShouldBeEmpty();
+            orm.ChangeTracker.GetAllEntries().ShouldBeEmpty();
 
             var person1 = new Person
             {
@@ -187,14 +188,14 @@ namespace IntegrationTests
             inserterContext.SaveChanges();
             GetFreshContext(options).Persons.Count().ShouldBe(3);
 
-            orm.ChangeTracker.Entries.ShouldBeEmpty();
+            orm.ChangeTracker.GetAllEntries().ShouldBeEmpty();
 
             var people = orm.GetQuery<Person>().ToList();
 
-            orm.ChangeTracker.Entries.Count.ShouldBe(3);
-            orm.ChangeTracker.Entries[people[0]].ShouldNotBeNull();
-            orm.ChangeTracker.Entries[people[1]].ShouldNotBeNull();
-            orm.ChangeTracker.Entries[people[2]].ShouldNotBeNull();
+            orm.ChangeTracker.GetAllEntries().Count().ShouldBe(3);
+            orm.ChangeTracker.GetEntry(people[0]).ShouldNotBeNull();
+            orm.ChangeTracker.GetEntry(people[1]).ShouldNotBeNull();
+            orm.ChangeTracker.GetEntry(people[2]).ShouldNotBeNull();
 
             people[0].Id.ShouldBe(person1.Id);
             people[1].Id.ShouldBe(person2.Id);

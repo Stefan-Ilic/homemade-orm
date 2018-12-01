@@ -40,14 +40,55 @@
             Tracks changed of CLR objects known to the ORM
             </summary>
         </member>
-        <member name="P:ORM.ChangeTracker.Entries">
+        <member name="M:ORM.ChangeTracker.GetEntry(System.Object)">
             <summary>
-            Holds ChangeTrackerEntries and the objects that belong to them
+            Returns ChangeTrackerEntry with of object
+            </summary>
+            <param name="obj"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ORM.ChangeTracker.GetEntry(System.Int32,System.Type)">
+            <summary>
+            Returns ChangeTrackerEntry with id and type
+            </summary>
+            <param name="id"></param>
+            <param name="type"></param>
+        </member>
+        <member name="M:ORM.ChangeTracker.GetAllEntries">
+            <summary>
+            Returns all change tracker entries
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:ORM.ChangeTracker.AddEntry(ORM.ChangeTrackerEntry)">
+            <summary>
+            Adds an entry to the change tracker
+            </summary>
+            <param name="entry"></param>
+        </member>
+        <member name="P:ORM.ChangeTracker.Count">
+            <summary>
+            The number of entries tracked
             </summary>
         </member>
-        <member name="P:ORM.ChangeTracker.EntriesWithId">
+        <member name="P:ORM.ChangeTracker.InsertedObjects">
             <summary>
-            Holds ChangeTrackerEntries and the ids and types that belong to them
+            Get all entries with State inserted
+            </summary>
+        </member>
+        <member name="P:ORM.ChangeTracker.UnmodifiedObjects">
+            <summary>
+            Get all entries with State unmodified
+            </summary>
+        </member>
+        <member name="P:ORM.ChangeTracker.DeletedObjects">
+            <summary>
+            Get all entries with State deleted
+            </summary>
+        </member>
+        <member name="P:ORM.ChangeTracker.ModifiedObjects">
+            <summary>
+            Get all entries with State modified
             </summary>
         </member>
         <member name="T:ORM.ChangeTrackerEntry">
