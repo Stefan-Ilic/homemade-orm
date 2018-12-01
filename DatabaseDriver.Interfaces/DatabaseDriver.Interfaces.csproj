@@ -4,4 +4,10 @@
     <TargetFramework>netcoreapp2.1</TargetFramework>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <WarningsAsErrors />
+    <DocumentationFile>C:\projects\homemade-orm\DatabaseDriver.Interfaces\DatabaseDriver.Interfaces.xml</DocumentationFile>
+  </PropertyGroup>
+
 </Project>

@@ -4,4 +4,10 @@
     <TargetFramework>netcoreapp2.1</TargetFramework>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <WarningsAsErrors />
+    <DocumentationFile>C:\projects\homemade-orm\SqlStatementBuilder.Interfaces\SqlStatementBuilder.Interfaces.xml</DocumentationFile>
+  </PropertyGroup>
+
 </Project>
