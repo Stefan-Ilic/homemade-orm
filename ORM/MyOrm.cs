@@ -44,10 +44,7 @@ namespace ORM
             //}
 
 
-            //TODO own method
-            _insertionId--;
-            var idProperty = OrmUtilities.GetPrimaryKeyProperty(objectToInsert.GetType());
-            idProperty.SetValue(objectToInsert, _insertionId);
+            SetPrimaryKey(objectToInsert);
 
             var changeTrackerEntry = new ChangeTrackerEntry
             {
@@ -56,9 +53,15 @@ namespace ORM
             };
 
             changeTrackerEntry.UpdateOriginals(objectToInsert);
-
             ChangeTracker.Entries.Add(objectToInsert, changeTrackerEntry);
             ChangeTracker.EntriesWithId.Add((_insertionId, objectToInsert.GetType()), changeTrackerEntry);
+        }
+
+        private static void SetPrimaryKey(object objectToSet)
+        {
+            _insertionId--;
+            var idProperty = OrmUtilities.GetPrimaryKeyProperty(objectToSet.GetType());
+            idProperty.SetValue(objectToSet, _insertionId);
         }
 
         public void Delete(object objectToDelete)
@@ -102,7 +105,6 @@ namespace ORM
                     property.SetValue(myObject, value);
                 }
 
-
                 var idProperty = OrmUtilities.GetPrimaryKeyProperty(myObject.GetType());
                 var id = idProperty.GetValue(myObject);
 
@@ -124,6 +126,7 @@ namespace ORM
 
                 changeTrackerEntry.UpdateOriginals(myObject);
                 ChangeTracker.Entries.Add(myObject, changeTrackerEntry);
+                objects.Add(myObject);
             }
 
             return objects;
@@ -139,14 +142,12 @@ namespace ORM
 
         private void UpdateUnmodifiedEntries()
         {
-            var unmodifiedChanges =
-                ChangeTracker.Entries.Values
-                    .Where(x => x.State == ChangeTrackerEntry.States.Unmodified);
+            var unmodifiedObjects = GetObjectsThatAre(ChangeTrackerEntry.States.Unmodified);
 
-            foreach (var entry in unmodifiedChanges)
+            foreach (var unmodifiedObject in unmodifiedObjects)
             {
-                var possiblyModifiedObject = entry.Item;
-                var originalProperties = entry.Originals;
+                var possiblyModifiedObject = unmodifiedObject;
+                var originalProperties = ChangeTracker.Entries[unmodifiedObject].Originals;
 
                 foreach (var originalProperty in originalProperties)
                 {
@@ -155,7 +156,8 @@ namespace ORM
                     var valueHasChanged = !Equals(valueThatMightHaveChanged, currentValueOfObject);
 
                     if (!valueHasChanged) continue;
-                    entry.State = ChangeTrackerEntry.States.Modified;
+                    ChangeTracker.Entries[unmodifiedObject]
+                        .State = ChangeTrackerEntry.States.Modified;
                     break;
                 }
             }
@@ -163,10 +165,9 @@ namespace ORM
 
         private void SubmitInsertedEntries()
         {
-            var insertedChanges = ChangeTracker.Entries
-                .Where(x => x.Value.State == ChangeTrackerEntry.States.Inserted);
+            var insertedObjects = GetObjectsThatAre(ChangeTrackerEntry.States.Inserted);
 
-            foreach (var objectToInsert in insertedChanges.Select(x => x.Key))
+            foreach (var objectToInsert in insertedObjects)
             {
                 _sqlBuilder.TableName = OrmUtilities.GetTableName(objectToInsert.GetType());
                 _sqlBuilder.Columns = OrmUtilities.GetColumns(objectToInsert);
@@ -175,15 +176,16 @@ namespace ORM
                 var idProperty = OrmUtilities.GetPrimaryKeyProperty(objectToInsert.GetType());
                 idProperty.SetValue(objectToInsert, newId);
 
+                ChangeTracker.Entries[objectToInsert].UpdateOriginals(objectToInsert);
                 ChangeTracker.Entries[objectToInsert].State = ChangeTrackerEntry.States.Unmodified;
             }
         }
 
         private void SubmitDeletedEntries()
         {
-            var deletedEntries = ChangeTracker.Entries.Where(x => x.Value.State == ChangeTrackerEntry.States.Deleted);
+            var deletedObjects = GetObjectsThatAre(ChangeTrackerEntry.States.Deleted);
 
-            foreach (var deletedObject in deletedEntries.Select(x => x.Key))
+            foreach (var deletedObject in deletedObjects)
             {
                 _sqlBuilder.TableName = OrmUtilities.GetTableName(deletedObject.GetType());
                 _sqlBuilder.Columns = OrmUtilities.GetColumns(deletedObject);
@@ -194,21 +196,25 @@ namespace ORM
 
         private void SubmitModifiedEntries()
         {
-            var modifiedEntries = ChangeTracker.Entries.Where(x => x.Value.State == ChangeTrackerEntry.States.Modified);
+            var modifiedObjects = GetObjectsThatAre(ChangeTrackerEntry.States.Modified);
 
-
-            foreach (var modifiedObject in modifiedEntries.Select(x => x.Key))
+            foreach (var modifiedObject in modifiedObjects)
             {
-                var builder = new MySqlStatementBuilder
-                {
-                    TableName = OrmUtilities.GetTableName(modifiedObject.GetType()),
-                    Columns = OrmUtilities.GetColumns(modifiedObject)
-                };
+                _sqlBuilder.TableName = OrmUtilities.GetTableName(modifiedObject.GetType());
+                _sqlBuilder.Columns = OrmUtilities.GetColumns(modifiedObject);
 
-                _dbDriver.RunUpdateStatement(builder.UpdateStatement);
+                _dbDriver.RunUpdateStatement(_sqlBuilder.UpdateStatement);
+
                 ChangeTracker.Entries[modifiedObject].State = ChangeTrackerEntry.States.Unmodified;
                 ChangeTracker.Entries[modifiedObject].UpdateOriginals(modifiedObject);
             }
+        }
+
+        private IEnumerable<object> GetObjectsThatAre(ChangeTrackerEntry.States state)
+        {
+            var myEntries = ChangeTracker.Entries.Where(x => x.Value.State == state);
+            var myObjects = myEntries.Select(x => x.Key);
+            return myObjects;
         }
 
         public ChangeTracker ChangeTracker { get; } = new ChangeTracker();

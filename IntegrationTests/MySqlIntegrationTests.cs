@@ -6,6 +6,7 @@ using DatabaseDriver;
 using Microsoft.EntityFrameworkCore;
 using ORM;
 using Shouldly;
+using SqlStatementBuilder;
 using Xunit;
 
 namespace IntegrationTests
@@ -27,11 +28,9 @@ namespace IntegrationTests
             Docker.Start("orm-test-mysql");
         }
 
-
         [Fact]
         public void Insert_Update_Delete_Select()
         {
-
             const string validConnectionString = "server=127.0.0.1;uid=root;pwd=root;database=test";
             var options = new DbContextOptionsBuilder<MysqlContext>()
                 .UseMySQL(validConnectionString)
@@ -41,7 +40,8 @@ namespace IntegrationTests
             context.SaveChanges();
 
             var driver = new MySqlDriver(validConnectionString);
-            var orm = new MyOrm(driver);
+            var sqlBuilder = new MySqlStatementBuilder();
+            var orm = new MyOrm(driver, sqlBuilder);
 
             orm.ChangeTracker.Entries.ShouldBeEmpty();
             orm.ChangeTracker.EntriesWithId.ShouldBeEmpty();
@@ -142,6 +142,77 @@ namespace IntegrationTests
             person1AndPerson2[0].ShouldBe(anotherPerson1);
             person1AndPerson2[0].ShouldBe(person1);
             person1AndPerson2[1].ShouldBe(person2);
+        }
+
+        [Fact]
+        public void Select_Multiple()
+        {
+            const string validConnectionString = "server=127.0.0.1;uid=root;pwd=root;database=test";
+            var options = new DbContextOptionsBuilder<MysqlContext>()
+                .UseMySQL(validConnectionString)
+                .Options;
+            var context = new MysqlContext(options);
+            context.RemoveRange(context.Persons);
+            context.SaveChanges();
+
+            var driver = new MySqlDriver(validConnectionString);
+            var sqlBuilder = new MySqlStatementBuilder();
+            var orm = new MyOrm(driver, sqlBuilder);
+
+            orm.ChangeTracker.Entries.ShouldBeEmpty();
+            orm.ChangeTracker.EntriesWithId.ShouldBeEmpty();
+
+            var person1 = new Person
+            {
+                FirstName = "Mike",
+                LastName = "Rosoft",
+                Age = 1337
+            };
+
+            var person2 = new Person
+            {
+                FirstName = "Tux",
+                LastName = "L. Oves",
+                Age = 80085
+            };
+
+            var person3 = new Person
+            {
+                FirstName = "Mac",
+                LastName = "N. Tosh",
+                Age = 1234
+            };
+
+            var inserterContext = GetFreshContext(options);
+            inserterContext.Persons.Add(person1);
+            inserterContext.Persons.Add(person2);
+            inserterContext.Persons.Add(person3);
+            inserterContext.SaveChanges();
+            GetFreshContext(options).Persons.Count().ShouldBe(3);
+
+            orm.ChangeTracker.Entries.ShouldBeEmpty();
+            orm.ChangeTracker.EntriesWithId.ShouldBeEmpty();
+
+            var people = orm.GetQuery<Person>().ToList();
+
+            orm.ChangeTracker.Entries.Count.ShouldBe(3);
+            orm.ChangeTracker.Entries[people[0]].ShouldNotBeNull();
+            orm.ChangeTracker.Entries[people[1]].ShouldNotBeNull();
+            orm.ChangeTracker.Entries[people[2]].ShouldNotBeNull();
+
+            people[0].Id.ShouldBe(person1.Id);
+            people[1].Id.ShouldBe(person2.Id);
+            people[2].Id.ShouldBe(person3.Id);
+
+            people[0].ShouldNotBe(person1);
+            people[1].ShouldNotBe(person2);
+            people[2].ShouldNotBe(person3);
+
+            var evenMorePeople = orm.GetQuery<Person>().ToList();
+
+            people[0].ShouldBe(evenMorePeople[0]);
+            people[1].ShouldBe(evenMorePeople[1]);
+            people[2].ShouldBe(evenMorePeople[2]);
         }
 
         private static MysqlContext GetFreshContext(DbContextOptions options)

@@ -10,6 +10,7 @@ namespace SqlStatementBuilder.Interfaces
         string SelectStatement { get; }
         string InsertStatement { get; }
         string DeleteStatement { get; }
+        string UpdateStatement { get; }
         string CreateTableStatement { get; }
         string TableName { get; set; }
         Type TableType { get; set; }
