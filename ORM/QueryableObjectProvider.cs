@@ -44,7 +44,7 @@ namespace ORM
 
             // DO THINGS WITH THE ORM
 
-            var list = _myOrm.Select<T>(visitor.SqlStatementBuilder);
+            var list = _myOrm.GetObjectsFromDb<T>(visitor.SqlStatementBuilder);
             return list.OfType<T>().GetEnumerator();
         }
     }

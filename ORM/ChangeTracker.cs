@@ -41,10 +41,7 @@ namespace ORM
         /// Returns all change tracker entries
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<ChangeTrackerEntry> GetAllEntries()
-        {
-            return _entries.Values;
-        }
+        public IEnumerable<ChangeTrackerEntry> Entries => _entries.Values;
 
         /// <summary>
         /// Adds an entry to the change tracker

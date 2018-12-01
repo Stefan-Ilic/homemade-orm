@@ -109,18 +109,18 @@ namespace IntegrationTests
             orm.ChangeTracker.UnmodifiedObjects.Count().ShouldBe(3);
 
             orm.Delete(person3);
-            orm.ChangeTracker.GetAllEntries().Count().ShouldBe(3);
+            orm.ChangeTracker.Entries.Count().ShouldBe(3);
             orm.ChangeTracker.DeletedObjects.Count().ShouldBe(1);
             orm.ChangeTracker.GetEntry(person3).State.ShouldBe(ChangeTrackerEntry.States.Deleted);
             GetFreshContext(options).Persons.Count().ShouldBe(3);
 
             orm.SubmitChanges();
-            orm.ChangeTracker.GetAllEntries().Count().ShouldBe(3);
+            orm.ChangeTracker.Entries.Count().ShouldBe(3);
             orm.ChangeTracker.DeletedObjects.Count().ShouldBe(1);
             orm.ChangeTracker.GetEntry(person3).State.ShouldBe(ChangeTrackerEntry.States.Deleted);
             GetFreshContext(options).Persons.Count().ShouldBe(2);
 
-            //Select
+            //GetObjectsFromDb
             var anotherPerson1 = orm.GetQuery<Person>()
                 .Where(p => p.FirstName == "Mike" &&
                             p.LastName == "Rosoft")
@@ -158,7 +158,7 @@ namespace IntegrationTests
             var sqlBuilder = new MySqlStatementBuilder();
             var orm = new MyOrm(driver, sqlBuilder);
 
-            orm.ChangeTracker.GetAllEntries().ShouldBeEmpty();
+            orm.ChangeTracker.Entries.ShouldBeEmpty();
 
             var person1 = new Person
             {
@@ -188,11 +188,11 @@ namespace IntegrationTests
             inserterContext.SaveChanges();
             GetFreshContext(options).Persons.Count().ShouldBe(3);
 
-            orm.ChangeTracker.GetAllEntries().ShouldBeEmpty();
+            orm.ChangeTracker.Entries.ShouldBeEmpty();
 
             var people = orm.GetQuery<Person>().ToList();
 
-            orm.ChangeTracker.GetAllEntries().Count().ShouldBe(3);
+            orm.ChangeTracker.Entries.Count().ShouldBe(3);
             orm.ChangeTracker.GetEntry(people[0]).ShouldNotBeNull();
             orm.ChangeTracker.GetEntry(people[1]).ShouldNotBeNull();
             orm.ChangeTracker.GetEntry(people[2]).ShouldNotBeNull();

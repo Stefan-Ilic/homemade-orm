@@ -49,14 +49,6 @@ namespace ORM
         /// <param name="objectToInsert"></param>
         public void Insert(object objectToInsert)
         {
-            var tableName = OrmUtilities.GetTableName(objectToInsert.GetType());
-
-            //if (!TableExists(tableName))
-            //{
-            //    CreateTable(objectToInsert.GetType());
-            //}
-
-
             SetId(objectToInsert, --_insertionId);
 
             var changeTrackerEntry = new ChangeTrackerEntry
@@ -111,23 +103,16 @@ namespace ORM
         /// <typeparam name="T"></typeparam>
         /// <param name="builder"></param>
         /// <returns></returns>
-        public List<T> Select<T>(ISqlStatementBuilder builder)
+        public List<T> GetObjectsFromDb<T>(ISqlStatementBuilder builder)
         {
             var selectResults = _dbDriver.RunSelectStatement(builder.SelectStatement);
             var objects = new List<T>();
 
             foreach (var result in selectResults)
             {
-                var myObject = Activator.CreateInstance<T>();
-                var properties = typeof(T).GetProperties();
-                foreach (var property in properties)
-                {
-                    var value = result[property.Name];
-                    property.SetValue(myObject, value);
-                }
+                var myObject = MaterializeObject<T>(result);
 
-                var idProperty = OrmUtilities.GetPrimaryKeyProperty(myObject.GetType());
-                var id = (int)idProperty.GetValue(myObject);
+                var id = GetId(myObject);
 
                 var possiblyExistingObject = ChangeTracker.GetEntry(id, typeof(T))?.Item;
 
@@ -151,6 +136,25 @@ namespace ORM
             }
 
             return objects;
+        }
+
+        private static T MaterializeObject<T>(IDictionary<string, object> result)
+        {
+            var myObject = Activator.CreateInstance<T>();
+            var properties = typeof(T).GetProperties();
+            foreach (var property in properties)
+            {
+                var value = result[property.Name];
+                property.SetValue(myObject, value);
+            }
+
+            return myObject;
+        }
+
+        private static int GetId(object obj)
+        {
+            var idProperty = OrmUtilities.GetPrimaryKeyProperty(obj.GetType());
+            return  (int)idProperty.GetValue(obj);
         }
 
         /// <summary>

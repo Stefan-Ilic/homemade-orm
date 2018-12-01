@@ -54,7 +54,7 @@
             <param name="id"></param>
             <param name="type"></param>
         </member>
-        <member name="M:ORM.ChangeTracker.GetAllEntries">
+        <member name="P:ORM.ChangeTracker.Entries">
             <summary>
             Returns all change tracker entries
             </summary>
@@ -344,7 +344,7 @@
             </summary>
             <param name="objectToDelete"></param>
         </member>
-        <member name="M:ORM.MyOrm.Select``1(SqlStatementBuilder.Interfaces.ISqlStatementBuilder)">
+        <member name="M:ORM.MyOrm.GetObjectsFromDb``1(SqlStatementBuilder.Interfaces.ISqlStatementBuilder)">
             <summary>
             Used by the query provider to materialize database objects
             </summary>
