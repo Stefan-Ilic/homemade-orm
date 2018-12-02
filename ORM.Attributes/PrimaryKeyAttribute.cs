@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace ORM.Attributes
 {
+    /// <inheritdoc />
     /// <summary>
     /// Used to denote the primary key of a class
     /// </summary>

@@ -1,18 +1,16 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
-using System.Net.Http.Headers;
-using System.Runtime.CompilerServices;
 using System.Threading;
 
-namespace IntegrationTests
+namespace ORM.Integration.Tests
 {
     public abstract class Docker
     {
-        private static List<string> _runningContainers = new List<string>();
+        private static readonly List<string> RunningContainers = new List<string>();
 
         public static void Start(string containerName)
         {
-            if (_runningContainers.Contains(containerName))
+            if (RunningContainers.Contains(containerName))
             {
                 return;
             }
@@ -40,12 +38,12 @@ namespace IntegrationTests
                 process.Close();
             }
             Thread.Sleep(1000);
-            _runningContainers.Remove(containerName);
+            RunningContainers.Remove(containerName);
         }
 
         public static void Stop(string containerName)
         {
-            if (!_runningContainers.Contains(containerName))
+            if (!RunningContainers.Contains(containerName))
             {
                 return;
             }

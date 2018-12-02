@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace ORM.Attributes
 {
+    /// <inheritdoc />
     /// <summary>
     /// Provides the ability to change the database column name of a propety
     /// </summary>

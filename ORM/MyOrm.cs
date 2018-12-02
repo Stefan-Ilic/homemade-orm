@@ -1,20 +1,10 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Data.SqlClient;
-using System.Dynamic;
 using System.Linq;
-using System.Net.Sockets;
-using System.Reflection;
-using System.Text;
 using ChangerTracking.Interfaces;
 using ChangeTracking.Entities;
-using DatabaseDriver;
 using DatabaseDriver.Interfaces;
-using MySql.Data.MySqlClient;
-using ORM.Attributes;
 using ORM.Utilities;
-using SqlStatementBuilder;
 using SqlStatementBuilder.Interfaces;
 
 namespace ORM
