@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ChangeTracker\ChangeTracker.csproj" />
+    <ProjectReference Include="..\ChangeTracker\ChangeTracking.csproj" />
     <ProjectReference Include="..\ORM\ORM.csproj" />
   </ItemGroup>
 

@@ -1,26 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using ChangerTracker.Interfaces;
-using ChangeTracker.Entities;
+using ChangeTracking.Entities;
 using DatabaseDriver;
+using IntegrationTests;
 using Microsoft.EntityFrameworkCore;
-using ORM;
 using Shouldly;
 using SqlStatementBuilder;
 using Xunit;
 
-namespace IntegrationTests
+namespace ORM.Integration.Tests
 {
     internal class MysqlContext : DbContext
     {
         public DbSet<Person> Persons { get; set; }
-
-        public MysqlContext(DbContextOptions options) : base(options)
-        {
-
-        }
+        public MysqlContext(DbContextOptions options) : base(options){}
     }
 
     public class MySqlIntegrationTests
@@ -43,7 +36,7 @@ namespace IntegrationTests
 
             var driver = new MySqlDriver(validConnectionString);
             var sqlBuilder = new MySqlStatementBuilder();
-            var changeTracker = new ChangeTracker.ChangeTracker();
+            var changeTracker = new ChangeTracking.ChangeTracker();
             var orm = new MyOrm(driver, sqlBuilder, changeTracker);
 
             orm.ChangeTracker.Count.ShouldBe(0);
@@ -159,7 +152,7 @@ namespace IntegrationTests
 
             var driver = new MySqlDriver(validConnectionString);
             var sqlBuilder = new MySqlStatementBuilder();
-            var changeTracker = new ChangeTracker.ChangeTracker();
+            var changeTracker = new ChangeTracking.ChangeTracker();
             var orm = new MyOrm(driver, sqlBuilder, changeTracker);
 
             orm.ChangeTracker.Entries.ShouldBeEmpty();

@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>ChangeTracking</name>
+    </assembly>
+    <members>
+        <member name="T:ChangeTracking.ChangeTracker">
+            <inheritdoc />
+        </member>
+        <member name="M:ChangeTracking.ChangeTracker.GetEntry(System.Object)">
+            <inheritdoc />
+        </member>
+        <member name="M:ChangeTracking.ChangeTracker.GetEntry(System.Int32,System.Type)">
+            <inheritdoc />
+        </member>
+        <member name="P:ChangeTracking.ChangeTracker.Entries">
+            <inheritdoc />
+        </member>
+        <member name="M:ChangeTracking.ChangeTracker.AddEntry(ChangeTracking.Entities.ChangeTrackerEntry)">
+            <inheritdoc />
+        </member>
+        <member name="P:ChangeTracking.ChangeTracker.Count">
+            <inheritdoc />
+        </member>
+        <member name="P:ChangeTracking.ChangeTracker.InsertedObjects">
+            <inheritdoc />
+        </member>
+        <member name="P:ChangeTracking.ChangeTracker.UnmodifiedObjects">
+            <inheritdoc />
+        </member>
+        <member name="P:ChangeTracking.ChangeTracker.DeletedObjects">
+            <inheritdoc />
+        </member>
+        <member name="P:ChangeTracking.ChangeTracker.ModifiedObjects">
+            <inheritdoc />
+        </member>
+    </members>
+</doc>

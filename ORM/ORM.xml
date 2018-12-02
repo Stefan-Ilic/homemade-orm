@@ -182,7 +182,7 @@
             The actual class used as an ORM
             </summary>
         </member>
-        <member name="M:ORM.MyOrm.#ctor(DatabaseDriver.Interfaces.IDatabaseDriver,SqlStatementBuilder.Interfaces.ISqlStatementBuilder,ChangerTracker.Interfaces.IChangeTracker)">
+        <member name="M:ORM.MyOrm.#ctor(DatabaseDriver.Interfaces.IDatabaseDriver,SqlStatementBuilder.Interfaces.ISqlStatementBuilder,ChangerTracking.Interfaces.IChangeTracker)">
             <inheritdoc />
         </member>
         <member name="M:ORM.MyOrm.GetQuery``1">

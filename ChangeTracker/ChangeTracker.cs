@@ -1,37 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using ChangerTracker.Interfaces;
-using ChangeTracker.Entities;
-using ORM;
+using ChangerTracking.Interfaces;
+using ChangeTracking.Entities;
 using ORM.Utilities;
 
-namespace ChangeTracker
+namespace ChangeTracking
 {
-    /// <summary>
-    /// Tracks changed of CLR objects known to the ORM
-    /// </summary>
+    /// <inheritdoc />
     public class ChangeTracker : IChangeTracker
     {
 
         private readonly Dictionary<object, ChangeTrackerEntry> _entries =
             new Dictionary<object, ChangeTrackerEntry>();
 
-        /// <summary>
-        /// Returns ChangeTrackerEntry with of object
-        /// </summary>
-        /// <param name="obj"></param>
-        /// <returns></returns>
+
+        /// <inheritdoc />
         public ChangeTrackerEntry GetEntry(object obj)
         {
             return _entries[obj];
         }
 
-        /// <summary>
-        /// Returns ChangeTrackerEntry with id and type
-        /// </summary>
-        /// <param name="id"></param>
-        /// <param name="type"></param>
+        /// <inheritdoc />
         public ChangeTrackerEntry GetEntry(int id, Type type)
         {
             var idProperty = OrmUtilities.GetPrimaryKeyProperty(type);
@@ -40,55 +30,39 @@ namespace ChangeTracker
                                 && idProperty.GetValue(entry.Item).Equals(id));
         }
 
-        /// <summary>
-        /// Returns all change tracker entries
-        /// </summary>
-        /// <returns></returns>
+        /// <inheritdoc />
         public IEnumerable<ChangeTrackerEntry> Entries => _entries.Values;
 
-        /// <summary>
-        /// Adds an entry to the change tracker
-        /// </summary>
-        /// <param name="entry"></param>
+
+        /// <inheritdoc />
         public void AddEntry(ChangeTrackerEntry entry)
         {
             if (entry.Item == null)
             {
                 throw new Exception("Item is null");
             }
-
             _entries.Add(entry.Item, entry);
         }
 
-        /// <summary>
-        /// The number of entries tracked
-        /// </summary>
+        /// <inheritdoc />
         public int Count => _entries.Count;
 
-        /// <summary>
-        /// Get all entries with State inserted
-        /// </summary>
+        /// <inheritdoc />
         public IEnumerable<object> InsertedObjects =>
             _entries.Where(x => x.Value.State == ChangeTrackerEntry.States.Inserted)
                 .Select(x => x.Key);
 
-        /// <summary>
-        /// Get all entries with State unmodified
-        /// </summary>
+        /// <inheritdoc />
         public IEnumerable<object> UnmodifiedObjects =>
             _entries.Where(x => x.Value.State == ChangeTrackerEntry.States.Unmodified)
                 .Select(x => x.Key);
 
-        /// <summary>
-        /// Get all entries with State deleted
-        /// </summary>
+        /// <inheritdoc />
         public IEnumerable<object> DeletedObjects =>
             _entries.Where(x => x.Value.State == ChangeTrackerEntry.States.Deleted)
                 .Select(x => x.Key);
 
-        /// <summary>
-        /// Get all entries with State modified
-        /// </summary>
+        /// <inheritdoc />
         public IEnumerable<object> ModifiedObjects =>
             _entries.Where(x => x.Value.State == ChangeTrackerEntry.States.Modified)
                 .Select(x => x.Key);

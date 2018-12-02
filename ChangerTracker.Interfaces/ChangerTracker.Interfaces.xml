@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>ChangerTracking.Interfaces</name>
+    </assembly>
+    <members>
+        <member name="T:ChangerTracking.Interfaces.IChangeTracker">
+            <summary>
+            Tracks changes of objects known to the ORM
+            </summary>
+        </member>
+        <member name="M:ChangerTracking.Interfaces.IChangeTracker.GetEntry(System.Object)">
+            <summary>
+            Returns the entry that belongs to given object
+            </summary>
+            <param name="obj"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ChangerTracking.Interfaces.IChangeTracker.GetEntry(System.Int32,System.Type)">
+            <summary>
+            Returns the entry that belongs to an object of a certain type with a certain id
+            </summary>
+            <param name="id"></param>
+            <param name="type"></param>
+            <returns></returns>
+        </member>
+        <member name="P:ChangerTracking.Interfaces.IChangeTracker.Entries">
+            <summary>
+            Returns all Entries
+            </summary>
+        </member>
+        <member name="M:ChangerTracking.Interfaces.IChangeTracker.AddEntry(ChangeTracking.Entities.ChangeTrackerEntry)">
+            <summary>
+            Adds an entry to the change tracker
+            </summary>
+            <param name="entry"></param>
+        </member>
+        <member name="P:ChangerTracking.Interfaces.IChangeTracker.Count">
+            <summary>
+            The number of entries in the change tracker
+            </summary>
+        </member>
+        <member name="P:ChangerTracking.Interfaces.IChangeTracker.InsertedObjects">
+            <summary>
+            Returns all objects marked as inserted
+            </summary>
+        </member>
+        <member name="P:ChangerTracking.Interfaces.IChangeTracker.UnmodifiedObjects">
+            <summary>
+            Returns all objects marked as unmodified
+            </summary>
+        </member>
+        <member name="P:ChangerTracking.Interfaces.IChangeTracker.ModifiedObjects">
+            <summary>
+            Returns all objects marked as modified
+            </summary>
+        </member>
+        <member name="P:ChangerTracking.Interfaces.IChangeTracker.DeletedObjects">
+            <summary>
+            Returns all objects marked as deleted
+            </summary>
+        </member>
+    </members>
+</doc>

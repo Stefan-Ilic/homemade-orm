@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>ChangeTracking.Entities</name>
+    </assembly>
+    <members>
+        <member name="T:ChangeTracking.Entities.ChangeTrackerEntry">
+            <summary>
+            Represents an Entry in the ORMs change tracker 
+            </summary>
+        </member>
+        <member name="P:ChangeTracking.Entities.ChangeTrackerEntry.Item">
+            <summary>
+            The object being tracked
+            </summary>
+        </member>
+        <member name="P:ChangeTracking.Entities.ChangeTrackerEntry.Originals">
+            <summary>
+            The original values of the object's properties before it was changed
+            </summary>
+        </member>
+        <member name="P:ChangeTracking.Entities.ChangeTrackerEntry.State">
+            <summary>
+            The current state of the entry
+            </summary>
+        </member>
+        <member name="T:ChangeTracking.Entities.ChangeTrackerEntry.States">
+            <summary>
+            Describes the current state of the object
+            </summary>
+        </member>
+        <member name="F:ChangeTracking.Entities.ChangeTrackerEntry.States.Unmodified">
+            <summary>
+            The object is thought to be unmodified
+            It is still possible that it has been modified
+            </summary>
+        </member>
+        <member name="F:ChangeTracking.Entities.ChangeTrackerEntry.States.Modified">
+            <summary>
+            The object has definitely been modified
+            </summary>
+        </member>
+        <member name="F:ChangeTracking.Entities.ChangeTrackerEntry.States.Inserted">
+            <summary>
+            The object has been inserted into the ORM
+            </summary>
+        </member>
+        <member name="F:ChangeTracking.Entities.ChangeTrackerEntry.States.Deleted">
+            <summary>
+            The object has been deleted from the orm
+            </summary>
+        </member>
+        <member name="M:ChangeTracking.Entities.ChangeTrackerEntry.UpdateOriginals(System.Object)">
+            <summary>
+            Updates the original values of the object's properties
+            after the changes are submitted 
+            </summary>
+            <param name="objectToUpdate"></param>
+        </member>
+    </members>
+</doc>

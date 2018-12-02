@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace ChangeTracker.Entities
+namespace ChangeTracking.Entities
 {
     /// <summary>
     /// Represents an Entry in the ORMs change tracker 
