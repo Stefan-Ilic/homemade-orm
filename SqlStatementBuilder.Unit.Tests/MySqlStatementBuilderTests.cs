@@ -11,25 +11,6 @@ namespace SqlStatementBuilder.Unit.Tests
     public class MySqlStatementBuilderTests
     {
         [Fact]
-        public void CreateTable_CorrectInput_CorrectStatement()
-        {
-            //var builder = new MySqlStatementBuilder()
-            //{
-            //    TableName = "people",
-            //    ColumnNamesAndTypes = new Dictionary<string, Type>
-            //    {
-            //        {"id", typeof(int)},
-            //        {"firstname", typeof(string)},
-            //        {"lastName", typeof(string)},
-            //        {"age", typeof(int)}
-            //    }
-            //};
-
-            //const string expected = @"CREATE TABLE people (id INT PRIMARY KEY,firstname TEXT,lastname TEXT,age INT)";
-            //builder.Statement.ToLower().ShouldBe(expected.ToLower());
-        }
-
-        [Fact]
         public void InsertStatement_CorrectInput_CorrectStatement()
         {
             ISqlStatementBuilder builder = new MySqlStatementBuilder
