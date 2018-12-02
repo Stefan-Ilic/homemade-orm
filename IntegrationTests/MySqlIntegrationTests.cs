@@ -2,7 +2,6 @@
 using System.Linq;
 using ChangeTracking.Entities;
 using DatabaseDriver;
-using IntegrationTests;
 using Microsoft.EntityFrameworkCore;
 using Shouldly;
 using SqlStatementBuilder;

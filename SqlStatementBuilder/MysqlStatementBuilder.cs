@@ -136,9 +136,9 @@ namespace SqlStatementBuilder
                     builder.Append(column.Key);
                     builder.Append("=");
                     builder.Append(TransformValueForDb(column.Value.Item2));
-                    builder.Append($" {GetBinaryExpressionSymbol(ExpressionType.AndAlso)} ");
+                    builder.Append($"{GetBinaryExpressionSymbol(ExpressionType.AndAlso)}");
                 }
-                builder.Length -= 6;//TODO hacky shit
+                builder.Length -= 5;//TODO hacky shit
                 return builder.ToString();
             }
         }

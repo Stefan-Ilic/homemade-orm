@@ -16,4 +16,10 @@
     <ProjectReference Include="..\SqlStatementBuilder\SqlStatementBuilder.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="Shouldly">
+      <HintPath>..\..\..\Users\Stefan\.nuget\packages\shouldly\3.0.1\lib\netstandard2.0\Shouldly.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>
