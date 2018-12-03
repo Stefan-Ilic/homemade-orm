@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>ORM.Utilities</name>
+    </assembly>
+    <members>
+        <member name="T:ORM.Utilities.OrmUtilities">
+            <summary>
+            Provides useful static functions used by multiple classes in the framework
+            </summary>
+        </member>
+        <member name="M:ORM.Utilities.OrmUtilities.GetColumns(System.Type)">
+            <summary>
+            Returns columns in a format expected by ISqlStatementbuilder
+            </summary>
+            <param name="tableType"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ORM.Utilities.OrmUtilities.GetColumns(System.Object)">
+            <summary>
+            Returns columns in a format expected by ISqlStatementbuilder
+            </summary>
+            <param name="objectToInsert"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ORM.Utilities.OrmUtilities.GetTableName(System.Type)">
+            <summary>
+            Returns the class name of a CLR type, or the table name if table attribute is set
+            </summary>
+            <param name="tableType"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ORM.Utilities.OrmUtilities.GetPrimaryKeyProperty(System.Type)">
+            <summary>
+            Returns the property info of the property marked is primary key
+            If none is marked, returns the property name id
+            Has to be an int
+            </summary>
+            <param name="tableType"></param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>

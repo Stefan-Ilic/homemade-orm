@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>ORM.Attributes</name>
+    </assembly>
+    <members>
+        <member name="T:ORM.Attributes.ColumnAttribute">
+            <inheritdoc />
+            <summary>
+            Provides the ability to change the database column name of a propety
+            </summary>
+        </member>
+        <member name="M:ORM.Attributes.ColumnAttribute.#ctor(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="P:ORM.Attributes.ColumnAttribute.ColumnName">
+            <summary>
+            The column name that is displayed in the database
+            </summary>
+        </member>
+        <member name="T:ORM.Attributes.PrimaryKeyAttribute">
+            <inheritdoc />
+            <summary>
+            Used to denote the primary key of a class
+            </summary>
+        </member>
+        <member name="T:ORM.Attributes.TableAttribute">
+            <inheritdoc />
+            <summary>
+            Used to describe a class used as a table
+            </summary>
+        </member>
+        <member name="M:ORM.Attributes.TableAttribute.#ctor(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="P:ORM.Attributes.TableAttribute.TableName">
+            <summary>
+            Used to change the default table name from class name to something else
+            </summary>
+        </member>
+    </members>
+</doc>
