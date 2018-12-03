@@ -46,6 +46,11 @@ namespace SqlStatementBuilder.Interfaces
         Type TableType { get; set; }
 
         /// <summary>
+        /// Name of the ID property
+        /// </summary>
+        string IdName { get; set; }
+
+        /// <summary>
         /// Represents columns of the table
         /// </summary>
         IDictionary<string, (Type, object)> Columns { get; set; }

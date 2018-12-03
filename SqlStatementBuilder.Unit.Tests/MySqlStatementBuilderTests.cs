@@ -22,7 +22,8 @@ namespace SqlStatementBuilder.Unit.Tests
                     {"FirstName", (typeof(string), "Mike")},
                     {"LastName", (typeof(string), "Rosoft")},
                     {"Age", (typeof(int), 1337)}
-                }
+                },
+                IdName = "Id"
             };
             const string expected = "INSERT INTO people (FirstName,LastName,Age) VALUES ('Mike','Rosoft',1337)";
             builder.InsertStatement.ShouldBe(expected);
@@ -40,7 +41,8 @@ namespace SqlStatementBuilder.Unit.Tests
                     {"FirstName", (typeof(string), "Mike")},
                     {"LastName", (typeof(string), "Rosoft")},
                     {"Age", (typeof(int), 1337)}
-                }
+                },
+                IdName = "Id"
             };
             const string expected = "UPDATE people SET FirstName='Mike',LastName='Rosoft',Age=1337 WHERE Id=1";
             builder.UpdateStatement.ShouldBe(expected);

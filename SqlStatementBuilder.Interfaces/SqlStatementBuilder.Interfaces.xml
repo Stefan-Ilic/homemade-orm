@@ -44,6 +44,11 @@
             The CLR type of objects of the table
             </summary>
         </member>
+        <member name="P:SqlStatementBuilder.Interfaces.ISqlStatementBuilder.IdName">
+            <summary>
+            Name of the ID property
+            </summary>
+        </member>
         <member name="P:SqlStatementBuilder.Interfaces.ISqlStatementBuilder.Columns">
             <summary>
             Represents columns of the table

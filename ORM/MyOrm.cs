@@ -38,7 +38,7 @@ namespace ORM
             return new QueryableObject<T>(this);
         }
 
-        private static int _insertionId; //TODO thread safety
+        private static int _insertionId;
 
         /// <summary>
         /// Used to add objects to the ORM
@@ -196,6 +196,7 @@ namespace ORM
             {
                 _sqlBuilder.TableName = OrmUtilities.GetTableName(objectToInsert.GetType());
                 _sqlBuilder.Columns = OrmUtilities.GetColumns(objectToInsert);
+                _sqlBuilder.IdName = OrmUtilities.GetPrimaryKeyProperty(objectToInsert.GetType()).Name;
 
                 var newId = _dbDriver.RunInsertStatement(_sqlBuilder.InsertStatement);
                 SetId(objectToInsert, newId);
@@ -226,6 +227,7 @@ namespace ORM
             {
                 _sqlBuilder.TableName = OrmUtilities.GetTableName(modifiedObject.GetType());
                 _sqlBuilder.Columns = OrmUtilities.GetColumns(modifiedObject);
+                _sqlBuilder.IdName = OrmUtilities.GetPrimaryKeyProperty(modifiedObject.GetType()).Name;
 
                 _dbDriver.RunUpdateStatement(_sqlBuilder.UpdateStatement);
 

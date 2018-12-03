@@ -11,6 +11,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ORM.Utilities\ORM.Utilities.csproj" />
     <ProjectReference Include="..\SqlStatementBuilder.Interfaces\SqlStatementBuilder.Interfaces.csproj" />
   </ItemGroup>
 

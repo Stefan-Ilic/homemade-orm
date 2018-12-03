@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
+using ORM.Utilities;
 using SqlStatementBuilder.Interfaces;
 
 namespace SqlStatementBuilder
@@ -41,8 +42,9 @@ namespace SqlStatementBuilder
         {
             get
             {
-                var columnsWithoutId = new Dictionary<string, (Type, object)>(Columns); //TODO hacky shit
-                columnsWithoutId.Remove("Id");
+                var copyOfColumns = new Dictionary<string, (Type, object)>(Columns);
+                copyOfColumns.Remove(IdName);
+                var columnsWithoutId = copyOfColumns;
                 var builder = new StringBuilder();
                 builder.Append("INSERT INTO ");
                 builder.Append(TableName);
@@ -69,7 +71,7 @@ namespace SqlStatementBuilder
                     builder.Append(pair.Key);
                     builder.Append(" ");
                     builder.Append(TransformDataTypeForDb(pair.Value.Item1));
-                    if (pair.Key.ToLower() == "id") //TODO hacky shit
+                    if (pair.Key == IdName)
                     {
                         builder.Append(" PRIMARY KEY AUTO_INCREMENT");
                     }
@@ -102,9 +104,10 @@ namespace SqlStatementBuilder
         {
             get
             {
-                var columnsWithoutId = new Dictionary<string, (Type, object)>(Columns); //TODO hacky shit
-                var id = columnsWithoutId["Id"].Item2;
-                columnsWithoutId.Remove("Id");
+                var copyOfColumns = new Dictionary<string, (Type, object)>(Columns);
+                var id = copyOfColumns[IdName].Item2;
+                copyOfColumns.Remove(IdName);
+                var columnsWithoutId = copyOfColumns;
                 var builder = new StringBuilder();
                 builder.Append("UPDATE ");
                 builder.Append(TableName);
@@ -117,7 +120,7 @@ namespace SqlStatementBuilder
                     builder.Append(",");
                 }
                 builder.Length--;
-                builder.Append($" WHERE Id={id}");
+                builder.Append($" WHERE {IdName}={id}");
                 return builder.ToString();
             }
         }
@@ -138,7 +141,9 @@ namespace SqlStatementBuilder
                     builder.Append(TransformValueForDb(column.Value.Item2));
                     builder.Append($"{GetBinaryExpressionSymbol(ExpressionType.AndAlso)}");
                 }
-                builder.Length -= 5;//TODO hacky shit
+
+                const int lengthOfLastAnd = 5;
+                builder.Length -= lengthOfLastAnd;
                 return builder.ToString();
             }
         }
@@ -148,6 +153,9 @@ namespace SqlStatementBuilder
 
         /// <inheritdoc />
         public Type TableType { get; set; }
+
+        /// <inheritdoc />
+        public string IdName { get; set; }
 
         /// <inheritdoc />
         public IDictionary<string, (Type, object)> Columns { get; set; } = new Dictionary<string, (Type type, object value)>();

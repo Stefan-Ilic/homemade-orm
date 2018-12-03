@@ -38,6 +38,7 @@ namespace ORM
             return base.VisitMemberAccess(m);
         }
 
+
         protected override Expression VisitMethodCall(MethodCallExpression methodCallExpression)
         {
             return base.VisitMethodCall(methodCallExpression);
@@ -45,7 +46,7 @@ namespace ORM
 
         protected override Expression VisitConstant(ConstantExpression c)
         {
-            if (!c.Value.GetType().IsPrimitive && !(c.Value is string)) //TODO decimal etc aint primitive either
+            if (!c.Value.GetType().IsPrimitive && !(c.Value is string))
             {
                 var tableType = c.Value.GetType().GetGenericArguments().FirstOrDefault();
 

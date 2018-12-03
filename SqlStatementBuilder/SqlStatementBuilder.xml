@@ -36,6 +36,9 @@
         <member name="P:SqlStatementBuilder.MySqlStatementBuilder.TableType">
             <inheritdoc />
         </member>
+        <member name="P:SqlStatementBuilder.MySqlStatementBuilder.IdName">
+            <inheritdoc />
+        </member>
         <member name="P:SqlStatementBuilder.MySqlStatementBuilder.Columns">
             <inheritdoc />
         </member>
