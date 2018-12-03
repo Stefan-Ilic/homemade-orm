@@ -79,11 +79,8 @@ namespace ORM.Utilities
         {
             var properties = tableType.GetProperties();
 
-            var enumeratedPrimaryKeyProperties =
-                properties.Where(p => p.GetCustomAttribute<PrimaryKeyAttribute>() != null);
-
-            var primaryKeyProperties = enumeratedPrimaryKeyProperties as PropertyInfo[]
-                                       ?? enumeratedPrimaryKeyProperties.ToArray();
+            var primaryKeyProperties =
+                properties.Where(p => p.GetCustomAttribute<PrimaryKeyAttribute>() != null).ToArray();
 
             if (primaryKeyProperties.Length > 1)
             {
