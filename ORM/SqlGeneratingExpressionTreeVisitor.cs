@@ -13,19 +13,14 @@ namespace ORM
     {
         public ISqlStatementBuilder SqlStatementBuilder = new MySqlStatementBuilder();
 
-        public override Expression Visit(Expression e)
-        {
-            return base.Visit(e);
-        }
-
         protected override Expression VisitMemberAccess(MemberExpression m)
         {
-            //its a variable
-            if (m.Expression is ConstantExpression expression &&
-                m.Member is FieldInfo info)
+            var isVariable = m.Expression is ConstantExpression && m.Member is FieldInfo;
+
+            if (isVariable)
             {
-                var container = expression.Value;
-                var value = info.GetValue(container);
+                var container = ((ConstantExpression)m.Expression).Value;
+                var value = ((FieldInfo)m.Member).GetValue(container);
                 SqlStatementBuilder.AddIntToCondition((int)value);
                 return base.VisitMemberAccess(m);
             }
@@ -51,6 +46,7 @@ namespace ORM
                 var tableType = c.Value.GetType().GetGenericArguments().FirstOrDefault();
 
                 var isVariable = c.Type.GetCustomAttribute<CompilerGeneratedAttribute>() != null;
+
                 if (isVariable)
                 {
                     return base.VisitConstant(c);
@@ -59,8 +55,6 @@ namespace ORM
                 SqlStatementBuilder.TableType = c.Value.GetType();
                 SqlStatementBuilder.TableName = OrmUtilities.GetTableName(tableType);
                 SqlStatementBuilder.Columns = OrmUtilities.GetColumns(tableType);
-
-
             }
             else
             {
@@ -74,8 +68,6 @@ namespace ORM
                         break;
                 }
             }
-
-
             return base.VisitConstant(c);
         }
 
