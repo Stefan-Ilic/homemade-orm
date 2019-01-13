@@ -4,7 +4,7 @@ namespace ORM.Attributes
 {
     /// <inheritdoc />
     /// <summary>
-    /// Provides the ability to change the database column name of a propety
+    /// Provides the ability to change the database column name of a property
     /// </summary>
     public class ColumnAttribute : Attribute
     {
